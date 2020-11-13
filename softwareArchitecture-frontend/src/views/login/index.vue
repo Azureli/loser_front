@@ -89,7 +89,7 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Register</el-button>
+      <el-button class="dark-red-btn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Register</el-button>
 
     </el-form></el-tab-pane>
   </el-tabs>

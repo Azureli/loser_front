@@ -8,6 +8,9 @@ $tiffany: #4AB7BD;
 $yellow:#FEC171;
 $panGreen: #30B08F;
 
+$darkRed:#510f0f;
+$darkRedHover:#470e0e;
+
 // sidebar
 $menuText:#afafaf;
 $menuActiveText:#ffffff;
@@ -32,4 +35,5 @@ $sideBarWidth: 210px;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
+  darkRedHover: $darkRedHover;
 }
