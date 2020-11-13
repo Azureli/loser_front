@@ -1,24 +1,24 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="!item.hidden" style="display:inline-block;">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu v-else :index="resolvePath(item.path)">
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <div style="display: inline-block; width:18px;" />
       </template>
-      <sidebar-item
+      <vertical-sub-item
         v-for="child in item.children"
         :key="child.path"
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
-        class="nest-menu"
       />
     </el-submenu>
   </div>
@@ -30,10 +30,11 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import VerticalSubItem from './VerticalSubItem'
 
 export default {
   name: 'SidebarItem',
-  components: { Item, AppLink },
+  components: { Item, AppLink, VerticalSubItem },
   mixins: [FixiOSBug],
   props: {
     // route object
