@@ -1,8 +1,7 @@
 <template>
   <div class="app-wrapper">
-    <logo />
     <topbar />
-    <navbar />
+    <!-- <navbar /> -->
     <div class="main-container">
       <app-main />
     </div>
