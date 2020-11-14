@@ -8,7 +8,7 @@
     <el-col :span="12" :offset="2">
       <p class="title">
         {{dish}}
-        <el-link href="#/dashboard" class="link">返回首页</el-link>
+        <el-link href="#/dashboard" :underline="false" class="link">返回首页</el-link>
       </p>
       <p class="dishprice">￥{{dishPrice}}</p>
 
@@ -22,7 +22,13 @@
     </el-col>
     <el-col :span="22" class="comment">
       <h5>用户评论</h5>
-      <item-comment v-for="(i, ind) in itemList" :key="ind" :commentInfo="i" :style="randomRgb(i)" class="line-style" />
+      <item-comment
+        v-for="(i, ind) in itemList"
+        :key="ind"
+        :commentInfo="i"
+        :style="randomRgb(i)"
+        class="line-style"
+      />
     </el-col>
   </el-row>
 </template>
@@ -30,7 +36,7 @@
 <script>
 import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
-import { mount } from "@vue/test-utils";
+
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
@@ -47,12 +53,12 @@ export default {
   },
   methods: {
     randomRgb(item) {
-      let R = Math.floor(Math.random() * 130+100);
-      let G = Math.floor(Math.random() * 130+100);
-      let B = Math.floor(Math.random() * 130+100);
+      let R = Math.floor(Math.random() * 130 + 100);
+      let G = Math.floor(Math.random() * 130 + 20);
+      let B = Math.floor(Math.random() * 130 + 20);
       return {
-        background: 'rgba(' + R + ',' + G + ',' + B + ',0.1)'
-        };
+        background: "rgba(" + R + "," + G + "," + B + ",0.04)"
+      };
     },
     getList() {
       this.itemList = [
@@ -85,6 +91,9 @@ export default {
 .dish-container {
   text-align: left;
   margin: 5% 10% 10% 15%;
+  .el-link.el-link--default:hover {
+    color: rgb(81, 15, 15) !important;
+  }
   .title {
     font-size: 30px;
     display: block;
@@ -112,8 +121,7 @@ export default {
   .el-button {
     float: right;
   }
-  .comment{
-    
+  .comment {
   }
 }
 </style>
