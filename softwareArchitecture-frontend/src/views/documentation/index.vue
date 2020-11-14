@@ -1,12 +1,24 @@
 <template>
-  <div class="app-container documentation-container">
-    <a class="document-btn" target="_blank" href="https://store.akveo.com/products/vue-java-admin-dashboard-spring?utm_campaign=akveo_store-Vue-Vue_demo%2Fgithub&utm_source=vue_admin&utm_medium=referral&utm_content=demo_English_button">Java backend integration</a>
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/">Documentation</a>
-    <a class="document-btn" target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">Github Repository</a>
-    <a class="document-btn" target="_blank" href="https://panjiachen.gitee.io/vue-element-admin-site/zh/">国内文档</a>
-    <dropdown-menu class="document-btn" :items="articleList" title="系列文章" />
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/zh/job/">内推招聘</a>
-  </div>
+
+<el-row  class="dish-container">
+  <el-col :span="8"  class="grid-content">
+    <div class="dish-image">
+      <el-image :src="src"></el-image>
+    </div>
+  </el-col>
+  <el-col :span="12" :offset="2" class="grid-content">
+      <p class="title" >{{dish}}  
+        <el-link  href="#/dashboard" class="link">返回首页</el-link></p>
+      <p class="dishprice">￥{{dishPrice}}</p>
+
+      <h5>主要原料</h5>
+      <p>        {{material}}      </p>
+      <h5>其他说明</h5>
+      <p>        {{explanations}}  <el-button>现在预订</el-button>    </p>
+      
+    </el-col>
+</el-row>
+
 </template>
 
 <script>
@@ -17,6 +29,11 @@ export default {
   components: { DropdownMenu },
   data() {
     return {
+       dish:"bug大餐",
+       dishPrice:"14",
+       material:"html,vue,宽油,耗子尾汁",
+       explanations:"吃了这道菜,不写bug,每天闪电五连鞭",
+       src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
       articleList: [
         { title: '基础篇', href: 'https://juejin.im/post/59097cd7a22b9d0065fb61d2' },
         { title: '登录权限篇', href: 'https://juejin.im/post/591aa14f570c35006961acac' },
@@ -33,25 +50,38 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.documentation-container {
-  margin: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-
-  .document-btn {
-    flex-shrink: 0;
+<style lang="scss" scope>
+.dish-container{
+  text-align: left;
+  margin:5% 10% 10% 15%;
+  .title{
+    font-size: 30px;
     display: block;
-    cursor: pointer;
-    background: black;
-    color: white;
-    height: 60px;
-    padding: 0 16px;
-    margin: 16px;
-    line-height: 60px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+  .dishprice{
+    color:red;
+  }
+  .dish-image{
+    
+  }
+  .h3{
     font-size: 20px;
-    text-align: center;
+  }
+  .link{
+    float:right;
+    color:grey;
+  }
+  .dishintro{
+    float:right;
+  }
+  .el-button{
+    float:right;
   }
 }
+
 </style>
