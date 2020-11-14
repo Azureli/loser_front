@@ -16,6 +16,7 @@
 /*my-btns*/
 @mixin colorBtnWithHover($color, $hoverColor) {
   background: $color;
+  color: #fff;
 
   &:hover {
     color: #fff;
@@ -24,11 +25,6 @@
 }
 
 .dark-red-btn {
-
-  &:hover {
-    color: #fff;
-    background-color: $darkRedHover;
-  }
   
   @include colorBtnWithHover($darkRed, $darkRedHover)
 }
