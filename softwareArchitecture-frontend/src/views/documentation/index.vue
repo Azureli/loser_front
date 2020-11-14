@@ -1,57 +1,127 @@
 <template>
-  <div class="app-container documentation-container">
-    <a class="document-btn" target="_blank" href="https://store.akveo.com/products/vue-java-admin-dashboard-spring?utm_campaign=akveo_store-Vue-Vue_demo%2Fgithub&utm_source=vue_admin&utm_medium=referral&utm_content=demo_English_button">Java backend integration</a>
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/">Documentation</a>
-    <a class="document-btn" target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">Github Repository</a>
-    <a class="document-btn" target="_blank" href="https://panjiachen.gitee.io/vue-element-admin-site/zh/">国内文档</a>
-    <dropdown-menu class="document-btn" :items="articleList" title="系列文章" />
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/zh/job/">内推招聘</a>
-  </div>
+  <el-row class="dish-container">
+    <el-col :span="8">
+      <div class="dish-image">
+        <el-image :src="src"></el-image>
+      </div>
+    </el-col>
+    <el-col :span="12" :offset="2">
+      <p class="title">
+        {{dish}}
+        <el-link href="#/dashboard" :underline="false" class="link">返回首页</el-link>
+      </p>
+      <p class="dishprice">￥{{dishPrice}}</p>
+
+      <h5>主要原料</h5>
+      <p>{{material}}</p>
+      <h5>其他说明</h5>
+      <p>
+        {{explanations}}
+        <el-button class="dark-red-btn">现在预订</el-button>
+      </p>
+    </el-col>
+    <el-col :span="22" class="comment">
+      <h5>用户评论</h5>
+      <item-comment
+        v-for="(i, ind) in itemList"
+        :key="ind"
+        :commentInfo="i"
+        :style="randomRgb(i)"
+        class="line-style"
+      />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import DropdownMenu from '@/components/Share/DropdownMenu'
+import DropdownMenu from "@/components/Share/DropdownMenu";
+import ItemComment from "./components/itemComment.vue";
 
 export default {
-  name: 'Documentation',
-  components: { DropdownMenu },
+  name: "Documentation",
+  components: { DropdownMenu, ItemComment },
   data() {
     return {
-      articleList: [
-        { title: '基础篇', href: 'https://juejin.im/post/59097cd7a22b9d0065fb61d2' },
-        { title: '登录权限篇', href: 'https://juejin.im/post/591aa14f570c35006961acac' },
-        { title: '实战篇', href: 'https://juejin.im/post/593121aa0ce4630057f70d35' },
-        { title: 'vue-admin-template 篇', href: 'https://juejin.im/post/595b4d776fb9a06bbe7dba56' },
-        { title: 'v4.0 篇', href: 'https://juejin.im/post/5c92ff94f265da6128275a85' },
-        { title: '自行封装 component', href: 'https://segmentfault.com/a/1190000009090836' },
-        { title: '优雅的使用 icon', href: 'https://juejin.im/post/59bb864b5188257e7a427c09' },
-        { title: 'webpack4（上）', href: 'https://juejin.im/post/59bb864b5188257e7a427c09' },
-        { title: 'webpack4（下）', href: 'https://juejin.im/post/5b5d6d6f6fb9a04fea58aabc' }
-      ]
+      dish: "bug大餐",
+      dishPrice: "14",
+      material: "html,vue,宽油,耗子尾汁",
+      explanations: "吃了这道菜,不写bug,每天闪电五连鞭",
+      src:
+        "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
+      itemList: []
+    };
+  },
+  methods: {
+    randomRgb(item) {
+      let R = Math.floor(Math.random() * 130 + 100);
+      let G = Math.floor(Math.random() * 130 + 20);
+      let B = Math.floor(Math.random() * 130 + 20);
+      return {
+        background: "rgba(" + R + "," + G + "," + B + ",0.04)"
+      };
+    },
+    getList() {
+      this.itemList = [
+        {
+          stuNum: "1120162047",
+          comment: "整挺好真不错"
+        },
+        {
+          stuNum: "1120168888",
+          comment: "贵了"
+        },
+        {
+          stuNum: "1120168888",
+          comment: "下次还来"
+        },
+        {
+          stuNum: "1125252566",
+          comment: "兄弟萌冲"
+        }
+      ];
     }
+  },
+  mounted() {
+    this.getList();
   }
-}
+};
 </script>
 
-<style lang="scss" scoped>
-.documentation-container {
-  margin: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-
-  .document-btn {
-    flex-shrink: 0;
+<style lang="scss" scope>
+.dish-container {
+  text-align: left;
+  margin: 5% 10% 10% 15%;
+  .el-link.el-link--default:hover {
+    color: rgb(81, 15, 15) !important;
+  }
+  .title {
+    font-size: 30px;
     display: block;
-    cursor: pointer;
-    background: black;
-    color: white;
-    height: 60px;
-    padding: 0 16px;
-    margin: 16px;
-    line-height: 60px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+  .dishprice {
+    color: red;
+  }
+  .dish-image {
+  }
+  .h3 {
     font-size: 20px;
-    text-align: center;
+  }
+  .link {
+    float: right;
+    color: grey;
+  }
+  .dishintro {
+    float: right;
+  }
+  .el-button {
+    float: right;
+  }
+  .comment {
   }
 }
 </style>
