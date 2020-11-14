@@ -14,7 +14,7 @@
       <h5>主要原料</h5>
       <p>        {{material}}      </p>
       <h5>其他说明</h5>
-      <p>        {{explanations}}  <el-button>现在预订</el-button>    </p>
+      <p>        {{explanations}}  <el-button class="dark-red-btn" :loading="loading">现在预订</el-button>    </p>
       
     </el-col>
 </el-row>

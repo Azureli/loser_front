@@ -17,10 +17,17 @@
 @mixin colorBtnWithHover($color, $hoverColor) {
   background: $color;
   color: #fff;
-
+  border:none;
   &:hover {
     color: #fff;
     background-color: $hoverColor;
+    border: none;
+  }
+
+  &:focus {
+    color: #fff;
+    background-color: $hoverColor;
+    border:none;
   }
 }
 
