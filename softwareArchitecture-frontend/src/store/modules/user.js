@@ -7,12 +7,16 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  id:''
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_ID: (state, id) => {
+    state.id = id
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -32,11 +36,14 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
+    let fd = new FormData();
+    fd.append('username', username);
+    fd.append('password', password)
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login(fd).then(response => {
+        commit('SET_ID', response.id)
+        commit('SET_TOKEN', 'token')
+        setToken('token')
         resolve()
       }).catch(error => {
         reject(error)
@@ -47,25 +54,22 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      let fd = new FormData();
+      fd.append('id', state.id)
+      getInfo(fd).then(response => {
 
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { roles, name, avatar, introduction } = data
+        const { roles, username} = response
 
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
+        if (!roles) {
           reject('getInfo: roles must be a non-null array!')
         }
 
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        commit('SET_NAME', username)
+        // commit('SET_AVATAR', 'avatar')
+        // commit('SET_INTRODUCTION', 'introduction')
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

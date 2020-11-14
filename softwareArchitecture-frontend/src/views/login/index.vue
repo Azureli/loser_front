@@ -122,12 +122,12 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '3220200931',
+        password: 'test123'
       },
       regForm: {
-        regName: 'admin',
-        regPassword: '111111'
+        regName: '3220200931',
+        regPassword: 'test123'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -191,7 +191,7 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path:  '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
