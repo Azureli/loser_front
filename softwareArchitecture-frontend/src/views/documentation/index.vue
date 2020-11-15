@@ -111,6 +111,7 @@ export default {
     this.dishid = this.$route.query.dishId;
     this.getInfo();
     this.getList();
+    console.log(this.$route.query)
   }
 };
 </script>

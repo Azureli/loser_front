@@ -4,8 +4,8 @@
     <div class="info-wrapper">
       <el-scrollbar>
         <el-row type="flex" align="center">
-          <el-col :span="18" class="card-info-name">{{ cardInfo.name }}</el-col>
-          <el-col :span="6" class="card-info-cost"
+          <el-col :span="17" class="card-info-name">{{ cardInfo.name }}</el-col>
+          <el-col :span="5" class="card-info-cost"
             >￥{{ cardInfo.cost }}</el-col
           >
         </el-row>
@@ -59,7 +59,8 @@ export default {
           ingredient: "配料123配料123配料123配料123配料123配料123配料123",
           name: "菜品名",
           canteen: "七食堂",
-          id:1
+          id:1,
+          introduction:"test"
         };
       },
     },
@@ -72,7 +73,7 @@ export default {
       this.$router.push({path:'/detail', query:{dishId: this.cardInfo.id}})
     },
     updateDish() {
-      this.$emit("updateDish", this.cardInfo.id)
+      this.$emit("updateDish", this.cardInfo)
     }
   },
 };
