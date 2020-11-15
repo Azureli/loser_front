@@ -15,3 +15,11 @@ export function addDish(data) {
     data
   })
 }
+
+export function updateDish(data) {
+  return request ({
+    url: '/editDish',
+    method: "post",
+    data
+  })
+}

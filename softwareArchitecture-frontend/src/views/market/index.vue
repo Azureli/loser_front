@@ -14,6 +14,7 @@
         <el-button
           @click="addDishDialog = true"
           v-permission="['admin', 'chef']"
+          class="dark-red-btn"
           >添加菜品</el-button
         >
         <el-select
@@ -86,7 +87,9 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="updateDishComfirm">确定</el-button>
+          <el-button class="dark-red-btn" @click="updateDishComfirm"
+            >确定</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -126,7 +129,9 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addDishComfirm">确定</el-button>
+          <el-button class="dark-red-btn" @click="addDishComfirm"
+            >确定</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -135,7 +140,7 @@
 
 <script>
 import ItemLine from "./component/itemLine.vue";
-import { fetchDishes, addDish } from "@/api/myApis.js";
+import { fetchDishes, addDish, updateDish } from "@/api/myApis.js";
 import permission from "@/directive/permission/index.js";
 import { mapGetters } from "vuex";
 
@@ -198,18 +203,47 @@ export default {
         .then((res) => {
           console.log(res);
           this.getList();
+          this.addDishDialog = false;
         })
         .catch((res) => {
           console.log(res);
+          this.addDishDialog = false;
         });
     },
     updateDishComfirm() {
       console.log(this.updateForm);
+      let fd = new FormData();
+      fd.append('dishId', this.updateForm.id)
+      fd.append("dishName", this.updateForm.name);
+      fd.append("ingredient", this.updateForm.ingredient);
+      fd.append("introduction", this.updateForm.introduction);
+      fd.append("cost", this.updateForm.cost);
+      fd.append("userId", this.id);
+      if (this.updateForm.imageList.length > 0)
+        fd.append("pic", this.updateForm.imageList[0].raw);
+      updateDish(fd)
+        .then((res) => {
+          console.log(res);
+          this.getList();
+          this.updateDishDialog = false;
+
+        })
+        .catch((res) => {
+          console.log(res);
+          this.updateDishDialog = false;
+        });
     },
-    updateDish(id) {
-      console.log(id);
-      this.updateForm.id = id;
-      this.updateDishDialog = true;
+    updateDish(data) {
+      console.log(data);
+      this.updateForm = {
+        id: data.id,
+        name: data.name,
+        cost: data.cost,
+        ingredient: data.ingredient,
+        introduction: data.introduction,
+        imageList: [],
+      }
+        this.updateDishDialog = true;
     },
     handleCurrentChange(val) {
       this.pagination.curpage = val;
@@ -223,14 +257,14 @@ export default {
           console.log(res);
           this.AllitemList = res.list.map((cur) => {
             return {
-              imgSrc:
-                "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+              imgSrc: "http://127.0.0.1:8000/" + cur.url,
               cost: cur.cost,
               seller: cur.seller,
               ingredient: cur.ingredient,
               name: cur.dishName,
               canteen: cur.canteen,
               id: cur.id,
+              introduction: cur.introduction,
             };
           });
           this.pagination.total = this.AllitemList.length;

@@ -83,6 +83,7 @@ export default {
   },
   mounted() {
     this.getList();
+    console.log(this.$route.query)
   }
 };
 </script>
