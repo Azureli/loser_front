@@ -17,7 +17,7 @@
         </pan-thumb>
       </div>
       <div class="box-center">
-        <div class="user-name text-center">{{ user.name }}</div>
+        <div class="user-name text-center">{{ name }}</div>
         <div class="user-role text-center text-muted">
           {{ user.role | uppercaseFirst }}<span v-permission="['admin', 'chef']">-{{ canteen }}</span>
         </div>
@@ -147,6 +147,7 @@ export default {
             }
           }
           this.$store.commit("user/SET_CANTEEN", name);
+          this.$store.commit("user/SET_NAME", this.selfForm.name);
           this.$message({
             message: "修改成功",
             type: "success",
