@@ -1,23 +1,63 @@
 <template>
-  <el-card style="margin-bottom:20px;">
+  <el-card style="margin-bottom: 20px">
     <div slot="header" class="clearfix">
       <span>About me</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
+        <pan-thumb
+          :image="user.avatar"
+          :height="'100px'"
+          :width="'100px'"
+          :hoverable="false"
+        >
           <div>Hello</div>
           {{ user.role }}
         </pan-thumb>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
-        <div class="user-role text-center text-muted">{{ user.role | uppercaseFirst }}</div>
+        <div class="user-role text-center text-muted">
+          {{ user.role | uppercaseFirst }}
+        </div>
       </div>
     </div>
 
-    <div class="user-bio">
+    <div class="user-bio" v-permission="['admin', 'chef']">
+      <div class="user-bio-section">
+        <div class="user-bio-section-header">
+          <i class="el-icon-edit" /><span>修改信息</span>
+        </div>
+        <div class="user-bio-section-body">
+          <el-form v-model="selfForm" label-width="80px">
+            <el-form-item label="商家名称">
+              <el-input v-model="selfForm.name" size="mini"></el-input>
+            </el-form-item>
+            <el-form-item label="隶属食堂">
+              <el-select
+                v-model="selfForm.canteen"
+                placeholder="选择食堂"
+                style="width: 100%"
+                size="mini"
+              >
+                <el-option
+                  v-for="(item, index) in canteenOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="dark-red-btn" size="mini" @click="changeSelf">立即创建</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="user-bio">
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
         <div class="user-bio-section-body">
@@ -48,29 +88,72 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </el-card>
 </template>
 
 <script>
-import PanThumb from '@/components/PanThumb'
+import PanThumb from "@/components/PanThumb";
+import { fetchCanteenList } from "@/api/myApis";
+import permission from "@/directive/permission/index.js";
+import { mapGetters } from "vuex";
 
 export default {
   components: { PanThumb },
+  directives: { permission },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   props: {
     user: {
       type: Object,
       default: () => {
         return {
-          name: '',
-          email: '',
-          avatar: '',
-          role: ''
-        }
-      }
-    }
+          name: "",
+          email: "",
+          avatar: "",
+          role: "",
+        };
+      },
+    },
+  },
+  data() {
+    return {
+      canteenOptions: [],
+      selfForm: {
+        name: "",
+        canteen: "",
+      },
+    };
+  },
+  methods: {
+    changeSelf(){
+      console.log(this.selfForm)
+      let fd = new FormData();
+      fd.append('username', this.selfForm.name)
+      fd.append('cateenId', this.canteen)
+      fd.append('userId', this.id)
+    },
+    getCanteenList() {
+      fetchCanteenList()
+        .then((res) => {
+          console.log(res);
+          this.canteenOptions = res.list.map((cur) => {
+            return {
+              value: cur.id,
+              label: cur.name,
+            };
+          });
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+  },
+  mounted(){
+    this.getCanteenList()
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

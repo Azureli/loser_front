@@ -87,38 +87,13 @@ export const constantRoutes = [
     path: '/detail',
     component: Layout,
     redirect: '/detail/index',
-    hidden:true,
+    hidden: true,
     children: [
       {
         path: 'index',
         component: () => import('@/views/documentation/index'),
         name: 'Detail',
         meta: { title: 'Detail', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/order',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/order/index'),
-        name: 'Order',
-        meta: { title: 'Order', icon: 'order', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: '我的订单', icon: 'guide', noCache: true }
       }
     ]
   },
@@ -142,6 +117,33 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/order',
+    component: Layout,
+    meta: { roles: ['admin','chef'] },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/order/index'),
+        name: 'Order',
+        meta: { title: '我的接单', icon: 'order', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/guide',
+    component: Layout,
+    meta: { roles: ['admin','user'] },
+    redirect: '/guide/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/guide/index'),
+        name: 'Guide',
+        meta: { title: '我的订单', icon: 'guide', noCache: true }
+      }
+    ]
+  },
   {
     path: '/permission',
     component: Layout,

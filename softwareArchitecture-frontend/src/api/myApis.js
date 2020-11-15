@@ -93,3 +93,34 @@ export function chefViewOrderHistory(data) {
   })
 }
 
+
+export function fetchCanteenList() {
+  return request ({
+    url: '/getCanteen',
+    method: "post"
+  })
+}
+
+export function register(data) {
+  return request ({
+    url: '/register',
+    method: "post",
+    data
+  })
+}
+
+export function deleteDish(data) {
+  return request ({
+    url: '/deleteDish',
+    method: "post",
+    data
+  })
+}
+
+export function searchDish(data) {
+  return request ({
+    url: '/searchDish',
+    method: "post",
+    data
+  })
+}

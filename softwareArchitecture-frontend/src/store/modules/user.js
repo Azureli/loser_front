@@ -64,8 +64,8 @@ const actions = {
         if (!roles) {
           reject('getInfo: roles must be a non-null array!')
         }
-
-        commit('SET_ROLES', [roles])
+        
+        commit('SET_ROLES', roles)
         commit('SET_NAME', username)
         commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
         // commit('SET_INTRODUCTION', 'introduction')

@@ -18,23 +18,26 @@
             {{ cardInfo.ingredient }}
           </p></el-row
         >
-        <el-button
-          v-permission="['admin', 'user', 'chef']"
-          class="dark-red-btn"
-          size="mini"
-          style="float: right; margin-right: 10px; margin-top: 5px"
-          @click="viewDetail"
-          >浏览</el-button
-        >
+        <el-row>
+          <i class="el-icon-delete icon-btn" @click="deleteDish"></i>
+          <el-button
+            v-permission="['admin', 'user', 'chef']"
+            class="dark-red-btn"
+            size="mini"
+            style="float: right; margin-right: 10px; margin-top: 5px"
+            @click="viewDetail"
+            >浏览</el-button
+          >
 
-        <el-button
-          v-permission="['admin', 'chef']"
-          class="dark-red-btn"
-          size="mini"
-          style="float: right; margin-right: 10px; margin-top: 5px"
-          @click="updateDish"
-          >修改</el-button
-        >
+          <el-button
+            v-permission="['admin', 'chef']"
+            class="dark-red-btn"
+            size="mini"
+            style="float: right; margin-right: 10px; margin-top: 5px"
+            @click="updateDish"
+            >修改</el-button
+          >
+        </el-row>
         <div style="height: 25px"></div>
       </el-scrollbar>
     </div>
@@ -43,10 +46,15 @@
 
 <script>
 import permission from "@/directive/permission/index.js";
+import { deleteDish } from "@/api/myApis";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ItemCard",
   directives: { permission },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   props: {
     cardInfo: {
       type: Object,
@@ -59,8 +67,8 @@ export default {
           ingredient: "配料123配料123配料123配料123配料123配料123配料123",
           name: "菜品名",
           canteen: "七食堂",
-          id:1,
-          introduction:"test"
+          id: 1,
+          introduction: "test",
         };
       },
     },
@@ -70,16 +78,49 @@ export default {
   },
   methods: {
     viewDetail() {
-      this.$router.push({path:'/detail', query:{dishId: this.cardInfo.id}})
+      this.$router.push({
+        path: "/detail",
+        query: { dishId: this.cardInfo.id },
+      });
     },
     updateDish() {
-      this.$emit("updateDish", this.cardInfo)
-    }
+      this.$emit("updateDish", this.cardInfo);
+    },
+    deleteDish() {
+      this.$emit("deleteDish", this.cardInfo);
+      // let fd = new FormData();
+      // fd.append("dishId", this.cardInfo.id);
+      // fd.append("userId", this.id);
+      // deleteDish(fd)
+      //   .then((res) => {
+      //     console.log(res);
+      //     if (res.error_num === 0) {
+      //       this.$message({
+      //         message: "删除成功！",
+      //         type: "success",
+      //       });
+      //     } else{
+
+      //     }
+      //   })
+      //   .catch((res) => {
+      //     console.log(res);
+      //     this.$message.error('出错了！');
+
+      //   });
+    },
   },
 };
 </script>
 
 <style lang="scss" scope>
+@import "~@/styles/variables.scss";
+.icon-btn {
+  color: $darkRedHover;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 .item-card-wrapper {
   padding: 0px;
   float: left;

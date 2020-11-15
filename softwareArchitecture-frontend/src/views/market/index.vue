@@ -7,27 +7,34 @@
           placeholder="搜索你想吃的菜肴"
           id="search-btn"
         >
-          <i class="el-icon-search" slot="suffix" @click="handleSearch"> </i>
+          <i
+            class="el-icon-search icon-btn"
+            slot="suffix"
+            @click="handleSearch"
+          >
+          </i>
         </el-input>
       </el-col>
       <el-col :span="8">
         <el-button
           @click="addDishDialog = true"
-          v-permission="['admin', 'chef']"
+          v-permission="['chef']"
           class="dark-red-btn"
+          style="float: right"
           >添加菜品</el-button
         >
         <el-select
           v-model="canteen"
           placeholder="选择食堂"
           style="width: 100%"
-          v-permission="['user']"
+          v-permission="['admin', 'user']"
+          @change="filterCanteen"
         >
           <el-option
             v-for="(item, index) in canteenOptions"
             :key="index"
-            :label="item"
-            :value="item"
+            :label="item.label"
+            :value="item.value"
           >
           </el-option>
         </el-select>
@@ -40,6 +47,7 @@
       :data="i"
       class="line-style"
       v-on:updateDish="updateDish"
+      v-on:deleteDish="deleteDish"
     />
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-pagination
@@ -122,7 +130,7 @@
             list-type="picture"
             :auto-upload="false"
           >
-            <el-button size="small" type="primary">点击上传</el-button>
+            <el-button size="small" class="dark-red-btn">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">
               只能上传jpg/png文件，且不超过500kb
             </div>
@@ -140,7 +148,14 @@
 
 <script>
 import ItemLine from "./component/itemLine.vue";
-import { fetchDishes, addDish, updateDish } from "@/api/myApis.js";
+import {
+  fetchDishes,
+  addDish,
+  updateDish,
+  fetchCanteenList,
+  deleteDish,
+  searchDish,
+} from "@/api/myApis.js";
 import permission from "@/directive/permission/index.js";
 import { mapGetters } from "vuex";
 
@@ -213,7 +228,7 @@ export default {
     updateDishComfirm() {
       console.log(this.updateForm);
       let fd = new FormData();
-      fd.append('dishId', this.updateForm.id)
+      fd.append("dishId", this.updateForm.id);
       fd.append("dishName", this.updateForm.name);
       fd.append("ingredient", this.updateForm.ingredient);
       fd.append("introduction", this.updateForm.introduction);
@@ -226,7 +241,6 @@ export default {
           console.log(res);
           this.getList();
           this.updateDishDialog = false;
-
         })
         .catch((res) => {
           console.log(res);
@@ -242,14 +256,80 @@ export default {
         ingredient: data.ingredient,
         introduction: data.introduction,
         imageList: [],
-      }
-        this.updateDishDialog = true;
+      };
+      this.updateDishDialog = true;
+    },
+    deleteDish(data) {
+      let fd = new FormData();
+      fd.append("dishId", data.id);
+      fd.append("userId", this.id);
+      deleteDish(fd)
+        .then((res) => {
+          console.log(res);
+          if (res.error_num === 0) {
+            this.$message({
+              message: "删除成功！",
+              type: "success",
+            });
+            this.getList();
+          } else {
+            this.$message.error("出错了！");
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+          this.$message.error("出错了！");
+        });
     },
     handleCurrentChange(val) {
       this.pagination.curpage = val;
       this.getList();
     },
-    handleSearch() {},
+    getRealList() {
+      this.pagination.total = this.AllitemList.length;
+      let tmp = this.AllitemList.slice(
+        (this.pagination.curpage - 1) * this.pagination.size,
+        this.pagination.curpage * this.pagination.size
+      );
+      this.itemLineList = [];
+      let item = [];
+      for (let i = 0; i < tmp.length; i++) {
+        item.push(tmp[i]);
+        if ((i - 3) % 4 == 0) {
+          this.itemLineList.push(item);
+          item = [];
+        }
+      }
+      if (item.length !== 0) this.itemLineList.push(item);
+    },
+    handleSearch() {
+      if (this.searchWord === "") {
+        this.getList();
+        return;
+      }
+      let fd = new FormData();
+      fd.append("keyword", this.searchWord);
+      searchDish(fd)
+        .then((res) => {
+          console.log(res);
+          this.AllitemList = res.list.map((cur) => {
+            return {
+              imgSrc: "http://127.0.0.1:8000/" + cur.url,
+              cost: cur.cost,
+              seller: cur.seller,
+              ingredient: cur.ingredient,
+              name: cur.dishName,
+              canteen: cur.canteen,
+              id: cur.id,
+              introduction: cur.introduction,
+            };
+          });
+          this.getRealList();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
     getList() {
       this.AllitemList = [];
       fetchDishes()
@@ -267,21 +347,56 @@ export default {
               introduction: cur.introduction,
             };
           });
-          this.pagination.total = this.AllitemList.length;
-          let tmp = this.AllitemList.slice(
-            (this.pagination.curpage - 1) * this.pagination.size,
-            this.pagination.curpage * this.pagination.size
-          );
-          this.itemLineList = [];
-          let item = [];
-          for (let i = 0; i < tmp.length; i++) {
-            item.push(tmp[i]);
-            if ((i - 3) % 4 == 0) {
-              this.itemLineList.push(item);
-              item = [];
-            }
-          }
-          if (item.length !== 0) this.itemLineList.push(item);
+          this.getRealList();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+
+    filterCanteen(val) {
+      let name = "";
+      for (let i of this.canteenOptions) {
+        if (i.value === val) {
+          name = i.label;
+          break;
+        }
+      }
+      
+      let fd = new FormData();
+      fd.append("keyword", name);
+      searchDish(fd)
+        .then((res) => {
+          console.log(res);
+          this.AllitemList = res.list.map((cur) => {
+            return {
+              imgSrc: "http://127.0.0.1:8000/" + cur.url,
+              cost: cur.cost,
+              seller: cur.seller,
+              ingredient: cur.ingredient,
+              name: cur.dishName,
+              canteen: cur.canteen,
+              id: cur.id,
+              introduction: cur.introduction,
+            };
+          });
+          this.getRealList();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+
+    getCanteenList() {
+      fetchCanteenList()
+        .then((res) => {
+          console.log(res);
+          this.canteenOptions = res.list.map((cur) => {
+            return {
+              value: cur.id,
+              label: cur.name,
+            };
+          });
         })
         .catch((res) => {
           console.log(res);
@@ -290,6 +405,7 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getCanteenList();
   },
 };
 </script>
@@ -317,6 +433,12 @@ export default {
 
 .el-pagination button:hover {
   color: $darkRedHover;
+}
+
+.icon-btn {
+  color: $darkRedHover;
+  margin-top: -5px;
+  cursor: pointer;
 }
 </style>
 
