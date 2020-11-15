@@ -14,20 +14,39 @@
         </el-row>
         <el-row class="card-info-other">主要原料：</el-row>
         <el-row class="card-info-other"
-          ><p style="text-indent: 30px; margin: 0;">
+          ><p style="text-indent: 30px; margin: 0">
             {{ cardInfo.ingredient }}
           </p></el-row
         >
-        <el-button class="dark-red-btn" size="mini" style="float:right; margin-right:10px;margin-top:5px;">浏览</el-button>
-        <div style="height:25px;"></div>
+        <el-button
+          v-permission="['admin', 'user', 'chef']"
+          class="dark-red-btn"
+          size="mini"
+          style="float: right; margin-right: 10px; margin-top: 5px"
+          @click="viewDetail"
+          >浏览</el-button
+        >
+
+        <el-button
+          v-permission="['admin', 'chef']"
+          class="dark-red-btn"
+          size="mini"
+          style="float: right; margin-right: 10px; margin-top: 5px"
+          @click="updateDish"
+          >修改</el-button
+        >
+        <div style="height: 25px"></div>
       </el-scrollbar>
     </div>
   </el-card>
 </template>
 
 <script>
+import permission from "@/directive/permission/index.js";
+
 export default {
   name: "ItemCard",
+  directives: { permission },
   props: {
     cardInfo: {
       type: Object,
@@ -40,6 +59,7 @@ export default {
           ingredient: "配料123配料123配料123配料123配料123配料123配料123",
           name: "菜品名",
           canteen: "七食堂",
+          id:1
         };
       },
     },
@@ -47,7 +67,14 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    viewDetail() {
+      this.$router.push({path:'/detail', query:{dishId: this.cardInfo.id}})
+    },
+    updateDish() {
+      this.$emit("updateDish", this.cardInfo.id)
+    }
+  },
 };
 </script>
 
@@ -58,17 +85,16 @@ export default {
   width: calc(25% - 20px);
   height: 350px;
 
-  
-.el-scrollbar__wrap{
-  overflow-x: hidden;
-}
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
 
   .el-card__body {
     padding: 0;
   }
 
   .el-image {
-    height:200px;
+    height: 200px;
   }
 
   .info-wrapper {
@@ -92,7 +118,5 @@ export default {
     }
   }
 }
-
-
 </style>
 

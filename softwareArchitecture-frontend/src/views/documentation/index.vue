@@ -8,7 +8,7 @@
     <el-col :span="12" :offset="2">
       <p class="title">
         {{dish}}
-        <el-link href="#/dashboard" :underline="false" class="link">返回首页</el-link>
+        <el-link href="#/market" :underline="false" class="link">返回首页</el-link>
       </p>
       <p class="dishprice">￥{{dishPrice}}</p>
 

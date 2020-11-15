@@ -5,6 +5,7 @@
       :key="ind"
       :cardInfo="i"
       class="card-inline-style"
+      v-on:updateDish="updateDish"
     />
   </el-row>
 </template>
@@ -26,7 +27,11 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    updateDish(id){
+      this.$emit('updateDish', id)
+    }
+  },
 };
 </script>
 

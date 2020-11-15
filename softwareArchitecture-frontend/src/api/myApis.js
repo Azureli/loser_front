@@ -7,3 +7,11 @@ export function fetchDishes(query) {
     params: query
   })
 }
+
+export function addDish(data) {
+  return request ({
+    url: '/addDish',
+    method: "post",
+    data
+  })
+}
