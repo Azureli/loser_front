@@ -1,9 +1,9 @@
 <template>
   <el-row class="dish-container">
     <el-col :span="8">
-      <div class="dish-image">
+    <div >
         <el-image :src="src"></el-image>
-      </div>
+    </div>
     </el-col>
     <el-col :span="12" :offset="2">
       <p class="title">
@@ -17,7 +17,7 @@
       <h5>其他说明</h5>
       <p>
         {{explanations}}
-        <el-button class="dark-red-btn" @click="orderdish">现在预订</el-button>
+        <el-button class="dark-red-btn" @click="orderdish" v-permission="['admin', 'user']">现在预订</el-button>
       </p>
     </el-col>
     <el-col :span="22" class="comment">
@@ -38,10 +38,12 @@ import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
 import {viewDishDetail,viewComment,orderDish} from '@/api/myApis.js';
 import { mapGetters } from "vuex";
+import permission from "@/directive/permission/index.js";
 
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
+  directives: { permission },
   computed: {
     ...mapGetters(["id"]),
   },
@@ -76,7 +78,6 @@ export default {
         {
           this.itemList.push(res.comments[i]);
         }
-        console.log(this.itemList)
         }).catch(res => {
             console.log(res)
         })
@@ -90,15 +91,14 @@ export default {
         this.cost=res.data.dishPrice;
         this.material=res.data.ingredient;
         this.explanations=res.data.introduction;
-        this.src="http://127.0.0.1:8000/" +res.data.url;
-        console.log(this.src)
+        this.src="http://127.0.0.1:8000/"+res.data.url;
         }).catch(res => {
             console.log(res)
         })
     },
     orderdish(){
     let fd = new FormData();
-    fd.append('dishId',this.id);
+    fd.append('dishId',this.dishid);
     fd.append('userId',this.id);
     orderDish(fd).then(res => {
     console.log(res)
@@ -136,7 +136,11 @@ export default {
   .dishprice {
     color: red;
   }
-  .dish-image {
+  .el-image {
+  width:380px;
+  height:300px;
+  object-fit: contain;
+object-position: top;
   }
   .h3 {
     font-size: 20px;

@@ -1,7 +1,7 @@
 <template>
   <el-row class="div-toget">
     <div>
-      <el-col :span="4" class="boldtext">{{dishInfo.cnt}} {{dishInfo.dish}}</el-col>
+      <el-col :span="4" class="boldtext">{{dishInfo.orderId}} {{dishInfo.dish}}</el-col>
       <el-col :offset="1" :span="4" class="canteen">{{dishInfo.canteen}}</el-col>
       <el-col :offset="1" :span="10" class="time">{{dishInfo.time}}</el-col>
       <el-col :offset="4" :span="3" class="div-num">已完成</el-col>
@@ -17,9 +17,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          cnt: 0,
+          orderId: 0,
           dish: "牛肉大餐",
-          dishnum: "12",
           canteen: "保国餐厅",
           time: "2020.11.11"
         };

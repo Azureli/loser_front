@@ -46,6 +46,54 @@ export function updateDish(data) {
   })
 }
 
+export function viewOrderNow(data) {
+  return request ({
+    url: '/viewOrderNow',
+    method: "post",
+    data
+  })
+}
+
+
+export function viewOrderHistory(data) {
+  return request ({
+    url: '/viewOrderHistory',
+    method: "post",
+    data
+  })
+}
+
+export function confirmOrder(data) {
+  return request ({
+    url: '/confirmOrder',
+    method: "post",
+    data
+  })
+}
+
+export function addComment(data) {
+  return request ({
+    url: '/addComment',
+    method: "post",
+    data
+  })
+}
+export function chefViewOrderNow(data) {
+  return request ({
+    url: '/chefViewOrderNow',
+    method: "post",
+    data
+  })
+}
+export function chefViewOrderHistory(data) {
+  return request ({
+    url: '/chefViewOrderHistory',
+    method: "post",
+    data
+  })
+}
+
+
 export function fetchCanteenList() {
   return request ({
     url: '/getCanteen',
