@@ -76,3 +76,11 @@ export function searchDish(data) {
     data
   })
 }
+
+export function changeUserInfo(data) {
+  return request ({
+    url: '/editUserInfo',
+    method: "post",
+    data
+  })
+}

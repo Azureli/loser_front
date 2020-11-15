@@ -11,6 +11,7 @@ const getters = {
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
   id: state => state.user.id,
+  canteen: state =>state.user.canteen,
   permission_routes: state => state.permission.routes,
   errorLogs: state => state.errorLog.logs
 }

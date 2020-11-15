@@ -9,7 +9,8 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
-  id:''
+  id:'',
+  canteen:''
 }
 
 const mutations = {
@@ -18,6 +19,9 @@ const mutations = {
   },
   SET_ID: (state, id) => {
     state.id = id
+  },
+  SET_CANTEEN: (state, canteen) => {
+    state.canteen = canteen
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -42,6 +46,7 @@ const actions = {
     fd.append('password', password)
     return new Promise((resolve, reject) => {
       login(fd).then(response => {
+
         commit('SET_ID', response.id)
         commit('SET_TOKEN', 'token')
         setToken('token')
@@ -58,13 +63,16 @@ const actions = {
       let fd = new FormData();
       fd.append('id', state.id)
       getInfo(fd).then(response => {
+        console.log(response)
         const { roles, username} = response
 
         // roles must be a non-empty array
         if (!roles) {
           reject('getInfo: roles must be a non-null array!')
         }
-        
+        if(response.roles[0] === 'chef')
+        commit('SET_CANTEEN', response.canteen)
+
         commit('SET_ROLES', roles)
         commit('SET_NAME', username)
         commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')

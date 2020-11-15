@@ -19,7 +19,7 @@
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
         <div class="user-role text-center text-muted">
-          {{ user.role | uppercaseFirst }}
+          {{ user.role | uppercaseFirst }}<span v-permission="['admin', 'chef']">-{{ canteen }}</span>
         </div>
       </div>
     </div>
@@ -51,7 +51,9 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button class="dark-red-btn" size="mini" @click="changeSelf">立即创建</el-button>
+              <el-button class="dark-red-btn" size="mini" @click="changeSelf"
+                >修改</el-button
+              >
             </el-form-item>
           </el-form>
         </div>
@@ -94,7 +96,7 @@
 
 <script>
 import PanThumb from "@/components/PanThumb";
-import { fetchCanteenList } from "@/api/myApis";
+import { fetchCanteenList, changeUserInfo } from "@/api/myApis";
 import permission from "@/directive/permission/index.js";
 import { mapGetters } from "vuex";
 
@@ -102,7 +104,7 @@ export default {
   components: { PanThumb },
   directives: { permission },
   computed: {
-    ...mapGetters(["id"]),
+    ...mapGetters(["id", "canteen", "name"]),
   },
   props: {
     user: {
@@ -121,18 +123,39 @@ export default {
     return {
       canteenOptions: [],
       selfForm: {
-        name: "",
+        name: this.user.name,
         canteen: "",
       },
     };
   },
   methods: {
-    changeSelf(){
-      console.log(this.selfForm)
+    changeSelf() {
+      console.log(this.selfForm);
       let fd = new FormData();
-      fd.append('username', this.selfForm.name)
-      fd.append('cateenId', this.canteen)
-      fd.append('userId', this.id)
+      fd.append("username", this.selfForm.name);
+      fd.append("canteenId", this.selfForm.canteen);
+      fd.append("userId", this.id);
+
+      changeUserInfo(fd)
+        .then((res) => {
+          console.log(res);
+          let name = "";
+          for (let i of this.canteenOptions) {
+            if (i.value === this.selfForm.canteen) {
+              name = i.label;
+              break;
+            }
+          }
+          this.$store.commit("user/SET_CANTEEN", name);
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+          console.log(this.name);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     },
     getCanteenList() {
       fetchCanteenList()
@@ -150,9 +173,9 @@ export default {
         });
     },
   },
-  mounted(){
-    this.getCanteenList()
-  }
+  mounted() {
+    this.getCanteenList();
+  },
 };
 </script>
 
