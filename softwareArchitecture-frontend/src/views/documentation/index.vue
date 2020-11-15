@@ -1,9 +1,9 @@
 <template>
   <el-row class="dish-container">
     <el-col :span="8">
-      <div class="dish-image">
+    <div >
         <el-image :src="src"></el-image>
-      </div>
+    </div>
     </el-col>
     <el-col :span="12" :offset="2">
       <p class="title">
@@ -89,14 +89,14 @@ export default {
         this.cost=res.data.dishPrice;
         this.material=res.data.ingredient;
         this.explanations=res.data.introduction;
-        this.src=res.data.url;
+        this.src="http://127.0.0.1:8000/"+res.data.url;
         }).catch(res => {
             console.log(res)
         })
     },
     orderdish(){
     let fd = new FormData();
-    fd.append('dishId',this.id);
+    fd.append('dishId',this.dishid);
     fd.append('userId',this.id);
     orderDish(fd).then(res => {
     console.log(res)
@@ -134,7 +134,11 @@ export default {
   .dishprice {
     color: red;
   }
-  .dish-image {
+  .el-image {
+  width:380px;
+  height:300px;
+  object-fit: contain;
+object-position: top;
   }
   .h3 {
     font-size: 20px;

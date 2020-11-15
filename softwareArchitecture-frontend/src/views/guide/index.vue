@@ -9,6 +9,7 @@
           :dishInfo="i"
           :style="randomRgb(i)"
           class="line-style"
+          v-on:updateList="updateList"
         />
       </div>
 
@@ -30,10 +31,15 @@
 import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemToget from "./components/itemToget.vue";
 import ItemHistory from "./components/itemHistory.vue";
+import {viewOrderNow,viewOrderHistory,confirmOrder,addComment} from '@/api/myApis.js';
+import { mapGetters } from "vuex";
 
 export default {
   name: "guide",
-  components: { DropdownMenu, ItemToget, ItemHistory },
+  components: { DropdownMenu, ItemToget, ItemHistory,confirmOrder },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   data() {
     return {
       itemList1: [],
@@ -50,64 +56,35 @@ export default {
       };
     },
     getList1() {
-      this.itemList1 = [
-        {
-          cnt: 0,
-          dish: "牛肉大餐",
-          canteen: "七食堂",
-          dishnum: "1"
-        },
-        {
-          cnt: 1,
-          dish: "麻瓜汁",
-          canteen: "霍格沃兹",
-          dishnum: "2"
-        },
-        {
-          cnt: 2,
-          dish: "耗子尾汁",
-          canteen: "保国餐厅",
-          dishnum: "55"
-        },
-        {
-          cnt: 3,
-          dish: "松果糖豆五莲煸",
-          canteen: "保国餐厅",
-          dishnum: "66"
+    this.itemList1 = []
+       let fd = new FormData();
+       fd.append('id',this.id);
+        viewOrderNow(fd).then(res => {
+        console.log(res)
+        for(let i=0;i<res.data.length;i++){
+        this.itemList1.push(res.data[i])
         }
-      ];
+        }).catch(res => {
+            console.log(res)
+        })
     },
     getList2() {
-      this.itemList2 = [
-        {
-          cnt: 0,
-          dish: "牛肉大餐",
-          canteen: "七食堂",
-          dishnum: "1",
-          time: "2020.11.11"
-        },
-        {
-          cnt: 1,
-          dish: "麻瓜汁",
-          canteen: "霍格沃兹",
-          dishnum: "2",
-          time: "2020.11.1"
-        },
-        {
-          cnt: 2,
-          dish: "耗子尾汁",
-          canteen: "保国餐厅",
-          dishnum: "55",
-          time: "2020.11.11"
-        },
-        {
-          cnt: 3,
-          dish: "松果糖豆五莲煸",
-          canteen: "保国餐厅",
-          dishnum: "66",
-          time: "2020.11.11"
+     this.itemList2 = []
+       let fd = new FormData();
+       fd.append('id',this.id);
+        viewOrderHistory(fd).then(res => {
+        console.log(res)
+        for(let i=0;i<res.data.length;i++){
+        this.itemList2.push(res.data[i])
         }
-      ];
+        }).catch(res => {
+            console.log(res)
+        })
+    },
+    updateList(){
+    console.log(1)
+    this.getList1();
+    this.getList2();
     }
   },
   mounted() {

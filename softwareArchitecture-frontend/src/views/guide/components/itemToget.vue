@@ -1,24 +1,30 @@
 <template>
   <el-row class="div-toget">
-    <el-col :span="4" class="boldtext">{{dishInfo.cnt}} {{dishInfo.dish}}</el-col>
+    <el-col :span="4" class="boldtext">{{dishInfo.orderId}} {{dishInfo.dish}}</el-col>
     <el-col :offset="1" :span="4" class="canteen">{{dishInfo.canteen}}</el-col>
-    <el-col :offset="1" :span="4" class="time"></el-col>
-    <el-col :offset="4" :span="3" class="div-num">取餐号：{{dishInfo.dishnum}}</el-col>
-    <el-button class="dark-red-btn">已领取</el-button>
+
+    <el-col :offset="4" :span="3" class="div-num">取餐号：{{dishInfo.waitNum}}</el-col>
+    <el-button class="dark-red-btn" @click="confirmOrder">已领取</el-button>
   </el-row>
 </template>
 
 <script>
+import {confirmOrder} from '@/api/myApis.js';
+import { mapGetters } from "vuex";
+
 export default {
   name: "ItemToget",
+  computed: {
+  ...mapGetters(["id"]),
+},
   props: {
     dishInfo: {
       type: Object,
       default: () => {
         return {
-          cnt: 0,
+          orderId: 0,
           dish: "牛肉大餐",
-          dishnum: "12",
+          waitNum: "12",
           canteen: "保国餐厅"
         };
       }
@@ -27,7 +33,18 @@ export default {
   data() {
     return {};
   },
-  methods: {}
+  methods: {
+  confirmOrder(){
+   let fd = new FormData();
+   fd.append('orderId',this.dishInfo.orderId);
+    confirmOrder(fd).then(res => {
+    console.log(res)
+    this.$emit("updateList")
+    }).catch(res => {
+        console.log(res)
+    })
+  }
+  }
 };
 </script>
 
