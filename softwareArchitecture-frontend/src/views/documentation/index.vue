@@ -17,7 +17,7 @@
       <h5>其他说明</h5>
       <p>
         {{explanations}}
-        <el-button class="dark-red-btn">现在预订</el-button>
+        <el-button class="dark-red-btn" @click="orderdish">现在预订</el-button>
       </p>
     </el-col>
     <el-col :span="22" class="comment">
@@ -36,18 +36,25 @@
 <script>
 import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
+import {viewDishDetail,viewComment,orderDish} from '@/api/myApis.js';
+import { mapGetters } from "vuex";
 
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   data() {
     return {
+      dishid:1,
+
       dish: "bug大餐",
       dishPrice: "14",
       material: "html,vue,宽油,耗子尾汁",
       explanations: "吃了这道菜,不写bug,每天闪电五连鞭",
       src:
-        "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
+        "F:\\图片\\61.bmp",
       itemList: []
     };
   },
@@ -61,27 +68,48 @@ export default {
       };
     },
     getList() {
-      this.itemList = [
+    let fd = new FormData();
+    fd.append('dishId',this.dishid);
+        viewComment(fd).then(res => {
+        console.log(res)
+        for (let i=0;i<res.comments.length;i++)
         {
-          stuNum: "1120162047",
-          comment: "整挺好真不错"
-        },
-        {
-          stuNum: "1120168888",
-          comment: "贵了"
-        },
-        {
-          stuNum: "1120168888",
-          comment: "下次还来"
-        },
-        {
-          stuNum: "1125252566",
-          comment: "兄弟萌冲"
+          this.itemList.push(res.comments[i]);
         }
-      ];
+        console.log(this.itemList)
+        }).catch(res => {
+            console.log(res)
+        })
+    },
+    getInfo() {
+    let fd = new FormData();
+    fd.append('id', this.dishid);
+      viewDishDetail(fd).then(res => {
+        console.log(res)
+        this.dish=res.data.dishName;
+        this.cost=res.data.dishPrice;
+        this.material=res.data.ingredient;
+        this.explanations=res.data.introduction;
+        this.src=res.data.url;
+        }).catch(res => {
+            console.log(res)
+        })
+    },
+    orderdish(){
+    let fd = new FormData();
+    fd.append('dishId',this.id);
+    fd.append('userId',this.id);
+    orderDish(fd).then(res => {
+    console.log(res)
+    }).catch(res => {
+        console.log(res)
+    })
+    this.$router.push({path:'/guide'})
     }
   },
   mounted() {
+    this.dishid = this.$route.query.dishId;
+    this.getInfo();
     this.getList();
     console.log(this.$route.query)
   }
