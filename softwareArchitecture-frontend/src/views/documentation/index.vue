@@ -76,7 +76,6 @@ export default {
         {
           this.itemList.push(res.comments[i]);
         }
-        console.log(this.itemList)
         }).catch(res => {
             console.log(res)
         })
