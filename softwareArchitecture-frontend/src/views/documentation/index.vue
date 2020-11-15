@@ -8,7 +8,7 @@
     <el-col :span="12" :offset="2">
       <p class="title">
         {{dish}}
-        <el-link href="#/dashboard" :underline="false" class="link">返回首页</el-link>
+        <el-link href="#/market" :underline="false" class="link">返回首页</el-link>
       </p>
       <p class="dishprice">￥{{dishPrice}}</p>
 
@@ -17,7 +17,7 @@
       <h5>其他说明</h5>
       <p>
         {{explanations}}
-        <el-button class="dark-red-btn">现在预订</el-button>
+        <el-button class="dark-red-btn" @click="orderdish">现在预订</el-button>
       </p>
     </el-col>
     <el-col :span="22" class="comment">
@@ -36,33 +36,23 @@
 <script>
 import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
+import {viewDishDetail,viewComment,orderDish} from '@/api/myApis.js';
 
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
   data() {
     return {
+      id:1,
+
       dish: "bug大餐",
       dishPrice: "14",
       material: "html,vue,宽油,耗子尾汁",
       explanations: "吃了这道菜,不写bug,每天闪电五连鞭",
       src:
-        "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
-      itemList: []
-    };
-  },
-  methods: {
-    randomRgb(item) {
-      let R = Math.floor(Math.random() * 130 + 100);
-      let G = Math.floor(Math.random() * 130 + 20);
-      let B = Math.floor(Math.random() * 130 + 20);
-      return {
-        background: "rgba(" + R + "," + G + "," + B + ",0.04)"
-      };
-    },
-    getList() {
-      this.itemList = [
-        {
+        "F:\\图片\\61.bmp",
+      itemList: [
+      {
           stuNum: "1120162047",
           comment: "整挺好真不错"
         },
@@ -77,11 +67,60 @@ export default {
         {
           stuNum: "1125252566",
           comment: "兄弟萌冲"
-        }
-      ];
+        }]
+    };
+  },
+  methods: {
+    randomRgb(item) {
+      let R = Math.floor(Math.random() * 130 + 100);
+      let G = Math.floor(Math.random() * 130 + 20);
+      let B = Math.floor(Math.random() * 130 + 20);
+      return {
+        background: "rgba(" + R + "," + G + "," + B + ",0.04)"
+      };
+    },
+    getList() {
+    let fd = new FormData();
+    fd.append('dishId',this.id);
+        viewComment(fd).then(res => {
+        console.log(res)
+
+        }).catch(res => {
+            console.log(res)
+        })
+        itemList
+    },
+    getInfo() {
+    let fd = new FormData();
+    fd.append('id', this.id);
+      viewDishDetail(fd).then(res => {
+        console.log(res)
+        this.dish=res.data.dishName;
+        this.cost=res.data.dishPrice;
+        this.material=res.data.ingredient;
+        this.explanations=res.data.introduction;
+        this.src=res.data.url;
+        }).catch(res => {
+            console.log(res)
+        })
+    },
+    orderdish(){
+    let fd = new FormData();
+    fd.append('dishId',this.id);
+    fd.append('userId',this.id);
+    orderDish(fd).then(res => {
+    console.log(res)
+
+    }).catch(res => {
+        console.log(res)
+    })
     }
   },
   mounted() {
+
+    //this.id = this.$route.query.dishId;
+    this.getInfo(this.id);
+
     this.getList();
   }
 };

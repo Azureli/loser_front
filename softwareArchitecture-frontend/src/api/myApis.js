@@ -7,3 +7,25 @@ export function fetchDishes(query) {
     params: query
   })
 }
+export function viewDishDetail(data) {
+  return request({
+    url:'/viewDishDetail',
+    method:'post',
+    data
+  })
+}
+
+export function viewComment(data){
+  return request({
+    url:'/viewComment',
+    method:'post',
+    data
+  })
+}
+export function orderDish(query){
+  return request({
+    url:'/orderDish',
+    method:'post',
+    data
+  })
+}
