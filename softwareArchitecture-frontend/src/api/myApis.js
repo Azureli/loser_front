@@ -23,3 +23,10 @@ export function updateDish(data) {
     data
   })
 }
+
+export function fetchCanteenList() {
+  return request ({
+    url: '/getCanteen',
+    method: "post"
+  })
+}

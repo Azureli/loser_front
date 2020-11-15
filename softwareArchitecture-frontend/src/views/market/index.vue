@@ -13,15 +13,16 @@
       <el-col :span="8">
         <el-button
           @click="addDishDialog = true"
-          v-permission="['admin', 'chef']"
+          v-permission="['chef']"
           class="dark-red-btn"
+          style="float:right;"
           >添加菜品</el-button
         >
         <el-select
           v-model="canteen"
           placeholder="选择食堂"
           style="width: 100%"
-          v-permission="['user']"
+          v-permission="['admin', 'user']"
         >
           <el-option
             v-for="(item, index) in canteenOptions"
