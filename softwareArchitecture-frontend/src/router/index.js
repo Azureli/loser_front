@@ -98,6 +98,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/order',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/order/index'),
+        name: 'Order',
+        meta: { title: 'Order', icon: 'order', affix: true }
+      }
+    ]
+  },
+  {
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
