@@ -37,13 +37,17 @@
 import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
 import {viewDishDetail,viewComment,orderDish} from '@/api/myApis.js';
+import { mapGetters } from "vuex";
 
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   data() {
     return {
-      id:1,
+      dishid:1,
 
       dish: "bug大餐",
       dishPrice: "14",
@@ -51,23 +55,7 @@ export default {
       explanations: "吃了这道菜,不写bug,每天闪电五连鞭",
       src:
         "F:\\图片\\61.bmp",
-      itemList: [
-      {
-          stuNum: "1120162047",
-          comment: "整挺好真不错"
-        },
-        {
-          stuNum: "1120168888",
-          comment: "贵了"
-        },
-        {
-          stuNum: "1120168888",
-          comment: "下次还来"
-        },
-        {
-          stuNum: "1125252566",
-          comment: "兄弟萌冲"
-        }]
+      itemList: []
     };
   },
   methods: {
@@ -81,18 +69,21 @@ export default {
     },
     getList() {
     let fd = new FormData();
-    fd.append('dishId',this.id);
+    fd.append('dishId',this.dishid);
         viewComment(fd).then(res => {
         console.log(res)
-
+        for (let i=0;i<res.comments.length;i++)
+        {
+          this.itemList.push(res.comments[i]);
+        }
+        console.log(this.itemList)
         }).catch(res => {
             console.log(res)
         })
-        itemList
     },
     getInfo() {
     let fd = new FormData();
-    fd.append('id', this.id);
+    fd.append('id', this.dishid);
       viewDishDetail(fd).then(res => {
         console.log(res)
         this.dish=res.data.dishName;
@@ -110,17 +101,15 @@ export default {
     fd.append('userId',this.id);
     orderDish(fd).then(res => {
     console.log(res)
-
     }).catch(res => {
         console.log(res)
     })
+    this.$router.push({path:'/guide'})
     }
   },
   mounted() {
-
-    //this.id = this.$route.query.dishId;
-    this.getInfo(this.id);
-
+    this.dishid = this.$route.query.dishId;
+    this.getInfo();
     this.getList();
   }
 };

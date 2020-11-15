@@ -22,7 +22,7 @@ export function viewComment(data){
     data
   })
 }
-export function orderDish(query){
+export function orderDish(data){
   return request({
     url:'/orderDish',
     method:'post',

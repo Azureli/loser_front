@@ -2,12 +2,12 @@
   <div class="div-comment">
     <p>
       <i class="el-icon-user"></i>
-      <span class="stunum">{{commentInfo.stuNum}}</span>
+      <span class="stunum">{{commentInfo.username}}</span>
     </p>
 
     <p class="comment">
       <i class="el-icon-s-comment"></i>
-      <span class="text">{{commentInfo.comment}}</span>
+      <span class="text">{{commentInfo.content}}</span>
     </p>
   </div>
 </template>
@@ -20,8 +20,9 @@ export default {
       type: Object,
       default: () => {
         return {
-          stuNum: "1120162047",
-          comment: "整挺好真不错"
+          username: "1120162047",
+          content: "整挺好真不错",
+          time:""
         };
       }
     }
