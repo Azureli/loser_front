@@ -90,7 +90,8 @@ export default {
         this.cost=res.data.dishPrice;
         this.material=res.data.ingredient;
         this.explanations=res.data.introduction;
-        this.src=res.data.url;
+        this.src="http://127.0.0.1:8000/" +res.data.url;
+        console.log(this.src)
         }).catch(res => {
             console.log(res)
         })

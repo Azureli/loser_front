@@ -6,6 +6,7 @@
       :cardInfo="i"
       class="card-inline-style"
       v-on:updateDish="updateDish"
+      v-on:deleteDish="deleteDish"
     />
   </el-row>
 </template>
@@ -28,8 +29,11 @@ export default {
     return {};
   },
   methods: {
-    updateDish(id){
-      this.$emit('updateDish', id)
+    updateDish(data){
+      this.$emit('updateDish', data)
+    },
+    deleteDish(data){
+      this.$emit('deleteDish', data)
     }
   },
 };

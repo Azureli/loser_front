@@ -125,16 +125,28 @@
             </el-tooltip>
 
             <el-form-item>
-              <el-radio-group v-model="regForm.role" @change="changeRole">
+              <span class="svg-container">
+                <i class="el-icon-menu" />
+              </span>
+              <el-radio-group
+                v-model="regForm.role"
+                @change="changeRole"
+                style="margin-left: 10px; heihgt: 49px"
+              >
                 <el-radio :label="1">食堂商户</el-radio>
                 <el-radio :label="2">学生</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="showCanteenList">
               <span class="svg-container">
-                <svg-icon icon-class="el-icon-house" />
+                <i class="el-icon-s-home" />
               </span>
-              <el-select v-model="regForm.canteen" placeholder="Canteen" size="mini">
+              <el-select
+                v-model="regForm.canteen"
+                placeholder="Canteen"
+                size="mini"
+                style="width: calc(100% - 30px)"
+              >
                 <el-option
                   v-for="item in canteenList"
                   :key="item.value"
@@ -149,7 +161,7 @@
               class="dark-red-btn"
               :loading="loading"
               style="width: 100%; margin-bottom: 30px"
-              @click.native.prevent="handleLogin"
+              @click.native.prevent="handleRegister"
               >Register</el-button
             >
           </el-form></el-tab-pane
@@ -162,7 +174,7 @@
 <script>
 import { validUsername } from "@/utils/validate";
 import SocialSign from "./components/SocialSignin";
-import { fetchCanteenList } from "@/api/myApis";
+import { fetchCanteenList, register } from "@/api/myApis";
 
 export default {
   name: "Login",
@@ -239,19 +251,42 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    handleRegister() {
+      console.log(this.regForm)
+      let fd = new FormData()
+      fd.append('username', this.regForm.regName);
+      fd.append('password', this.regForm.regPassword);
+      fd.append('role', this.regForm.role)
+      if(this.regForm.role === 1) {
+        fd.append('belongId', this.regForm.canteen)
+      }
+
+      register(fd).then(res => {
+        console.log(res)
+        if(res.error_num === 0) {
+          this.$message({
+          message: '注册成功',
+          type: 'success'
+        });
+        }
+      }).catch(res => {
+        console.log(res)
+      })
+    },
+
     getCanteenList() {
       fetchCanteenList()
         .then((res) => {
-          console.log(res)
-          this.canteenList = res.list.map(cur => {
+          console.log(res);
+          this.canteenList = res.list.map((cur) => {
             return {
               value: cur.id,
-              label: cur.name
-            }
-          })
+              label: cur.name,
+            };
+          });
         })
         .catch((res) => {
-          console.log(res)
+          console.log(res);
         });
     },
     changeRole(val) {
@@ -328,12 +363,23 @@ export default {
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
+@import "~@/styles/variables.scss";
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
     color: $cursor;
   }
 }
+
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: $darkRedHover;
+  background:$darkRedHover;
+}
+
+.el-radio__input.is-checked + .el-radio__label {
+  color: $darkRedHover;
+}
+
 .el-tabs__active-bar {
   background-color: #510F0F;
   height: 3px;
@@ -387,6 +433,12 @@ $cursor: #fff;
         box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
+    }
+  }
+
+  .el-select {
+    .el-input {
+      width: 100%;
     }
   }
 
