@@ -11,7 +11,17 @@
         </el-input>
       </el-col>
       <el-col :span="8">
-        <el-select v-model="canteen" placeholder="选择食堂" style="width: 100%">
+        <el-button
+          @click="addDishDialog = true"
+          v-permission="['admin', 'chef']"
+          >添加菜品</el-button
+        >
+        <el-select
+          v-model="canteen"
+          placeholder="选择食堂"
+          style="width: 100%"
+          v-permission="['user']"
+        >
           <el-option
             v-for="(item, index) in canteenOptions"
             :key="index"
@@ -28,8 +38,9 @@
       :key="ind"
       :data="i"
       class="line-style"
+      v-on:updateDish="updateDish"
     />
-    <el-row type="flex" justify="center" style="margin-top:20px;">
+    <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-pagination
         :current-page="pagination.curpage"
         :page-size="pagination.size"
@@ -39,18 +50,121 @@
       >
       </el-pagination>
     </el-row>
+
+    <!-- 修改菜品弹窗 -->
+    <el-dialog title="修改菜品" :visible.sync="updateDishDialog">
+      <el-form ref="updateForm" :model="updateForm" label-width="120px">
+        <el-form-item label="菜品名称">
+          <el-input v-model="updateForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="售价">
+          <el-input v-model="updateForm.cost"></el-input>
+        </el-form-item>
+        <el-form-item label="主要原料">
+          <el-input v-model="updateForm.ingredient"></el-input>
+        </el-form-item>
+        <el-form-item label="其他介绍">
+          <el-input
+            v-model="updateForm.introduction"
+            type="textarea"
+            :rows="2"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="图片描述">
+          <el-upload
+            action=""
+            :limit="1"
+            :on-change="changeFileForUpdate"
+            :file-list="updateForm.imageList"
+            list-type="picture"
+            :auto-upload="false"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="updateDishComfirm">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 添加菜品弹窗 -->
+    <el-dialog title="添加菜品" :visible.sync="addDishDialog">
+      <el-form ref="updateForm" :model="updateForm" label-width="120px">
+        <el-form-item label="菜品名称">
+          <el-input v-model="addForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="售价">
+          <el-input v-model="addForm.cost"></el-input>
+        </el-form-item>
+        <el-form-item label="主要原料">
+          <el-input v-model="addForm.ingredient"></el-input>
+        </el-form-item>
+        <el-form-item label="其他介绍">
+          <el-input
+            v-model="addForm.introduction"
+            type="textarea"
+            :rows="2"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="图片描述">
+          <el-upload
+            action=""
+            :limit="1"
+            :on-change="changeFileForAdd"
+            :file-list="addForm.imageList"
+            list-type="picture"
+            :auto-upload="false"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addDishComfirm">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import ItemLine from "./component/itemLine.vue";
-import {fetchDishes} from '@/api/myApis.js';
+import { fetchDishes, addDish } from "@/api/myApis.js";
+import permission from "@/directive/permission/index.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Market",
+  directives: { permission },
   components: { ItemLine },
+  computed: {
+    ...mapGetters(["id"]),
+  },
   data() {
     return {
+      addForm: {
+        name: "",
+        cost: "",
+        ingredient: "",
+        introduction: "",
+        imageList: [],
+      },
+      addDishDialog: false,
+      updateForm: {
+        id: "",
+        name: "",
+        cost: "",
+        ingredient: "",
+        introduction: "",
+        imageList: [],
+      },
+      updateDishDialog: false,
       itemLineList: [],
       AllitemList: [],
       searchWord: "",
@@ -64,224 +178,80 @@ export default {
     };
   },
   methods: {
+    changeFileForUpdate(file, filelist) {
+      this.updateForm.imageList = filelist;
+    },
+    changeFileForAdd(file, filelist) {
+      this.addForm.imageList = filelist;
+    },
+    addDishComfirm() {
+      console.log(this.addForm);
+      let fd = new FormData();
+      fd.append("dishName", this.addForm.name);
+      fd.append("ingredient", this.addForm.ingredient);
+      fd.append("introduction", this.addForm.introduction);
+      fd.append("cost", this.addForm.cost);
+      fd.append("userId", this.id);
+      fd.append("pic", this.addForm.imageList[0].raw);
+
+      addDish(fd)
+        .then((res) => {
+          console.log(res);
+          this.getList();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    updateDishComfirm() {
+      console.log(this.updateForm);
+    },
+    updateDish(id) {
+      console.log(id);
+      this.updateForm.id = id;
+      this.updateDishDialog = true;
+    },
     handleCurrentChange(val) {
       this.pagination.curpage = val;
       this.getList();
     },
     handleSearch() {},
     getList() {
-      this.AllitemList = [
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient:
-            "配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient:
-            "配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient:
-            "配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient:
-            "配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient:
-            "配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-        {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-        },
-      ];
-        fetchDishes().then(res => {
-            console.log(res)
-        }).catch(res => {
-            console.log(res)
+      this.AllitemList = [];
+      fetchDishes()
+        .then((res) => {
+          console.log(res);
+          this.AllitemList = res.list.map((cur) => {
+            return {
+              imgSrc:
+                "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+              cost: cur.cost,
+              seller: cur.seller,
+              ingredient: cur.ingredient,
+              name: cur.dishName,
+              canteen: cur.canteen,
+              id: cur.id,
+            };
+          });
+          this.pagination.total = this.AllitemList.length;
+          let tmp = this.AllitemList.slice(
+            (this.pagination.curpage - 1) * this.pagination.size,
+            this.pagination.curpage * this.pagination.size
+          );
+          this.itemLineList = [];
+          let item = [];
+          for (let i = 0; i < tmp.length; i++) {
+            item.push(tmp[i]);
+            if ((i - 3) % 4 == 0) {
+              this.itemLineList.push(item);
+              item = [];
+            }
+          }
+          if (item.length !== 0) this.itemLineList.push(item);
         })
-
-      this.pagination.total = this.AllitemList.length;
-      let tmp = this.AllitemList.slice(
-        (this.pagination.curpage - 1) * this.pagination.size,
-        this.pagination.curpage * this.pagination.size
-      );
-      this.itemLineList = [];
-      let item = [];
-      for (let i = 0; i < tmp.length; i++) {
-        item.push(tmp[i]);
-        if ((i - 3) % 4 == 0) {
-          this.itemLineList.push(item);
-          item = [];
-        }
-      }
-      if (item.length !== 0) this.itemLineList.push(item);
+        .catch((res) => {
+          console.log(res);
+        });
     },
   },
   mounted() {
@@ -303,17 +273,16 @@ export default {
   }
 }
 
-
-.el-pager li.active{
-    color:$darkRed;
+.el-pager li.active {
+  color: $darkRed;
 }
 
-.el-pager li:hover{
-    color:$darkRedHover;
+.el-pager li:hover {
+  color: $darkRedHover;
 }
 
-.el-pagination button:hover{
-    color:$darkRedHover;
+.el-pagination button:hover {
+  color: $darkRedHover;
 }
 </style>
 

@@ -29,3 +29,11 @@ export function orderDish(query){
     data
   })
 }
+
+export function addDish(data) {
+  return request ({
+    url: '/addDish',
+    method: "post",
+    data
+  })
+}

@@ -79,19 +79,21 @@ export const constantRoutes = [
         path: 'market',
         component: () => import('@/views/market/index'),
         name: 'Market',
-        meta: { title: 'Market', icon: 'el-icon-s-shop', affix: true }
+        meta: { title: '商城', icon: 'el-icon-s-shop', affix: true }
       }
     ]
   },
   {
-    path: '/documentation',
+    path: '/detail',
     component: Layout,
+    redirect: '/detail/index',
+    hidden:true,
     children: [
       {
         path: 'index',
         component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        name: 'Detail',
+        meta: { title: 'Detail', icon: 'documentation', affix: true }
       }
     ]
   },
@@ -116,7 +118,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/guide/index'),
         name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
+        meta: { title: '我的订单', icon: 'guide', noCache: true }
       }
     ]
   },
@@ -124,13 +126,12 @@ export const constantRoutes = [
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
-    hidden: true,
     children: [
       {
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        meta: { title: '个人信息', icon: 'user', noCache: true }
       }
     ]
   }

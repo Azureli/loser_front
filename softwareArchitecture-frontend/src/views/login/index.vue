@@ -122,12 +122,12 @@ export default {
     }
     return {
       loginForm: {
-        username: '3220200931',
+        username: '3220200950',
         password: 'test123'
       },
       regForm: {
-        regName: '3220200931',
-        regPassword: 'test123'
+        regName: '',
+        regPassword: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
