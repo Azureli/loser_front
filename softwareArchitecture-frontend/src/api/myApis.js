@@ -78,7 +78,7 @@ export function addComment(data) {
     data
   })
 }
-export function chefViewOrder(data) {
+export function chefViewOrderNow(data) {
   return request ({
     url: '/chefViewOrderNow',
     method: "post",

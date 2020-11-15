@@ -56,6 +56,7 @@ export default {
     getList1() {
      let fd = new FormData();
      fd.append('userId',this.id);
+     console.log(this.id)
       chefViewOrderNow(fd).then(res => {
       console.log(res)
       for(let i=0;i<res.data.length;i++){
@@ -64,6 +65,7 @@ export default {
       }
       }).catch(res => {
           console.log(res)
+
       })
     },
     getList2() {
@@ -80,8 +82,10 @@ export default {
     }
   },
   mounted() {
-    this.getList1();
-    this.getList2();
+  console.log("123****");
+  this.getList1();
+  console.log("######");
+  this.getList2();
   }
 };
 </script>

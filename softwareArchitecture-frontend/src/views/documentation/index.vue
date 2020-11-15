@@ -17,7 +17,7 @@
       <h5>其他说明</h5>
       <p>
         {{explanations}}
-        <el-button class="dark-red-btn" @click="orderdish">现在预订</el-button>
+        <el-button class="dark-red-btn" @click="orderdish" v-permission="['admin', 'user']">现在预订</el-button>
       </p>
     </el-col>
     <el-col :span="22" class="comment">
@@ -38,10 +38,12 @@ import DropdownMenu from "@/components/Share/DropdownMenu";
 import ItemComment from "./components/itemComment.vue";
 import {viewDishDetail,viewComment,orderDish} from '@/api/myApis.js';
 import { mapGetters } from "vuex";
+import permission from "@/directive/permission/index.js";
 
 export default {
   name: "Documentation",
   components: { DropdownMenu, ItemComment },
+  directives: { permission },
   computed: {
     ...mapGetters(["id"]),
   },
