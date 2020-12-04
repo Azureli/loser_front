@@ -23,6 +23,20 @@
           style="float: right"
           >添加菜品</el-button
         >
+        <el-button
+          @click="viewMyDish"
+          v-permission="['chef']"
+          class="dark-red-btn"
+          style="float: right;margin-right: 10px"
+        >
+          <span v-if="showAll">
+            查看我的菜品
+          </span>
+          <span v-else>
+            查看全部菜品
+          </span>
+        </el-button
+        >
         <el-select
           v-model="canteen"
           placeholder="选择食堂"
@@ -168,6 +182,7 @@ export default {
   },
   data() {
     return {
+      showAll:true,
       addForm: {
         name: "",
         cost: "",
@@ -200,6 +215,33 @@ export default {
   methods: {
     changeFileForUpdate(file, filelist) {
       this.updateForm.imageList = filelist;
+    },
+    viewMyDish(){
+      this.showAll=!this.showAll;
+      if(this.showAll)
+      {
+        this.pagination = {
+          curpage: 1,
+          size: 16,
+          total: 0,
+        };
+        this.getList();
+      }
+      else {
+        let oldList = [].concat(this.AllitemList);
+        this.AllitemList = [];
+        for (let i = 0; i < oldList.length; i++) {
+          if (oldList[i].sellerId === this.id) {
+            this.AllitemList.push(oldList[i])
+          }
+        }
+        this.pagination = {
+          curpage: 1,
+          size: 16,
+          total: 0,
+        };
+        this.getRealList();
+      }
     },
     changeFileForAdd(file, filelist) {
       this.addForm.imageList = filelist;
@@ -322,6 +364,7 @@ export default {
               canteen: cur.canteen,
               id: cur.id,
               introduction: cur.introduction,
+              sellerId:cur.sellerId,
             };
           });
           this.getRealList();
@@ -345,6 +388,7 @@ export default {
               canteen: cur.canteen,
               id: cur.id,
               introduction: cur.introduction,
+              sellerId:cur.sellerId,
             };
           });
           this.getRealList();
@@ -362,7 +406,6 @@ export default {
           break;
         }
       }
-      
       let fd = new FormData();
       fd.append("keyword", name);
       searchDish(fd)
@@ -378,8 +421,14 @@ export default {
               canteen: cur.canteen,
               id: cur.id,
               introduction: cur.introduction,
+              sellerId:cur.sellerId,
             };
           });
+          this.pagination = {
+            curpage: 1,
+            size: 16,
+            total: 0,
+          };
           this.getRealList();
         })
         .catch((res) => {

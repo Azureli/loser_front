@@ -88,7 +88,7 @@ export default {
       viewDishDetail(fd).then(res => {
         console.log(res)
         this.dish=res.data.dishName;
-        this.cost=res.data.dishPrice;
+        this.dishPrice=res.data.cost;
         this.material=res.data.ingredient;
         this.explanations=res.data.introduction;
         this.src="http://127.0.0.1:8000/"+res.data.url;

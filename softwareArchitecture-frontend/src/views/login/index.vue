@@ -197,8 +197,8 @@ export default {
     return {
       canteenList: [],
       loginForm: {
-        username: "3220200950",
-        password: "test123",
+        username: "3220200930",
+        password: "nihaoya",
       },
       regForm: {
         regName: "",
@@ -364,7 +364,9 @@ $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
 @import "~@/styles/variables.scss";
-
+.login-container .el-input input{
+  color: #510F0F !important;
+}
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
     color: $cursor;

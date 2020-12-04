@@ -19,7 +19,9 @@
           </p></el-row
         >
         <el-row>
-          <i class="el-icon-delete icon-btn" @click="deleteDish"></i>
+          <i class="el-icon-delete icon-btn"
+             v-if="cardInfo.sellerId===id"
+             @click="deleteDish"></i>
           <el-button
             v-permission="['admin', 'user', 'chef']"
             class="dark-red-btn"
@@ -31,6 +33,7 @@
 
           <el-button
             v-permission="['admin', 'chef']"
+            v-if="cardInfo.sellerId===this.id"
             class="dark-red-btn"
             size="mini"
             style="float: right; margin-right: 10px; margin-top: 5px"
@@ -69,6 +72,7 @@ export default {
           canteen: "七食堂",
           id: 1,
           introduction: "test",
+          sellerId:0,
         };
       },
     },
