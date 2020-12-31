@@ -2,7 +2,7 @@
   <div class="logo-wrapper">
     <el-row type="flex" align="middle">
     <img src="./../../../icons/BITlogo2.png" fit="contain"/>
-    <span>食堂在线点餐系统</span>
+    <span>LOSER直聘网</span>
     </el-row>
   </div>
 </template>
