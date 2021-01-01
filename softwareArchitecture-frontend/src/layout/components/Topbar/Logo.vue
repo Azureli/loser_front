@@ -2,7 +2,7 @@
   <div class="logo-wrapper">
     <el-row type="flex" align="middle">
     <img src="./../../../icons/BITlogo2.png" fit="contain"/>
-    <span>LOSER直聘网</span>
+    <h2>LOSER直聘</h2>
     </el-row>
   </div>
 </template>
