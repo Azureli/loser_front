@@ -4,11 +4,9 @@
       <h2>
         {{position}}
         <span class="dishprice">薪资 {{salary}}</span>
-         <el-button @click="submit-cv" v-permission="['user']">投递简历</el-button>
+        <el-button @click="submitcv" v-permission="['user']">投递简历</el-button>
       </h2>
-      <h3>
-        工作地点：{{workplace}}·招聘人数：{{Num}}·时间：{{worktime}}
-      </h3>
+      <h3>工作地点：{{workplace}}·招聘人数：{{Num}}·时间：{{worktime}}</h3>
     </div>
     <el-col :span="10" :offset="2">
       <div>
@@ -40,7 +38,6 @@
 
 <script>
 import DropdownMenu from "@/components/Share/DropdownMenu";
-import ItemComment from "./components/itemComment.vue";
 import {} from "@/api/myApis.js";
 import { mapGetters } from "vuex";
 import permission from "@/directive/permission/index.js";
@@ -70,28 +67,6 @@ export default {
     };
   },
   methods: {
-    randomRgb(item) {
-      let R = Math.floor(Math.random() * 130 + 100);
-      let G = Math.floor(Math.random() * 130 + 20);
-      let B = Math.floor(Math.random() * 130 + 20);
-      return {
-        background: "rgba(" + R + "," + G + "," + B + ",0.04)"
-      };
-    },
-    getList() {
-      let fd = new FormData();
-      fd.append("dishId", this.dishid);
-      viewComment(fd)
-        .then(res => {
-          console.log(res);
-          for (let i = 0; i < res.comments.length; i++) {
-            this.itemList.push(res.comments[i]);
-          }
-        })
-        .catch(res => {
-          console.log(res);
-        });
-    },
     getInfo() {
       let fd = new FormData();
       fd.append("id", this.dishid);
@@ -108,25 +83,14 @@ export default {
           console.log(res);
         });
     },
-    orderdish() {
-      let fd = new FormData();
-      fd.append("dishId", this.dishid);
-      fd.append("userId", this.id);
-      orderDish(fd)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(res => {
-          console.log(res);
-        });
-      this.$router.push({ path: "/guide" });
+    submitcv() {
+      this.$router.push({ path: "/resume" });
+    },
+    mounted() {
+      this.dishid = this.$route.query.dishId;
+      this.getInfo();
+      console.log(this.$route.query);
     }
-  },
-  mounted() {
-    this.dishid = this.$route.query.dishId;
-    this.getInfo();
-    this.getList();
-    console.log(this.$route.query);
   }
 };
 </script>
