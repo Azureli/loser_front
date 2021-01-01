@@ -98,6 +98,34 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/resume',
+    component: Layout,
+    redirect: '/resume/edit',
+    hidden: true,
+    children: [
+      {
+        path: 'edit',
+        component: () => import('@/views/resume-submit/index'),
+        name: 'editResume',
+        meta: { title: 'editResume', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/state',
+    component: Layout,
+    redirect: '/state/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/resume-state/index'),
+        name: 'resumeState',
+        meta: { title: 'resumeState', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+  {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
