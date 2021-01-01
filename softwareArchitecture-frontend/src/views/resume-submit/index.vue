@@ -78,7 +78,7 @@
           </el-input>
         </el-row>
       </div>
-      <el-button style="background-color: #ffbc5a;color: #ffffff;" @click="submitResume">
+      <el-button  @click="submitResume">
         提交
       </el-button>
     </el-main>
@@ -139,7 +139,7 @@
     width: calc(100vw - 100px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border-radius: 4px;
-    margin:20px 35px 20px 20px;
+    margin:20px 15%;
     padding: 50px;
   }
 
@@ -192,4 +192,13 @@
     margin-left: 20px;
     margin-bottom: 10px;
   }
+
+  .el-button{
+    background-color: #ffbc5a;
+    color: #ffffff;
+    width: 150px;
+    height: 45px;
+    font-size: 1.1em;
+  }
+
 </style>
