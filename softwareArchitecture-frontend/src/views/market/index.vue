@@ -1,60 +1,27 @@
 <template>
   <div class="market-container">
-    <el-row type="flex" align="center" :gutter="20">
-      <el-col :span="16">
-        <el-input
-          v-model="searchWord"
-          placeholder="搜索你想吃的菜肴"
-          id="search-btn"
-        >
-          <i
-            class="el-icon-search icon-btn"
-            slot="suffix"
-            @click="handleSearch"
-          >
-          </i>
+    <el-row type="flex" align="middle" style="margin-top: 20px;margin-bottom: 20px;">
+      <el-col :span="16" :offset="4">
+        <el-input v-model="selectionForm.jobValue"
+                  class="input-with-select"
+                  placeholder="搜索职位">
+          <el-select v-model="selectionForm.jobType" slot="prepend"
+                     :placeholder="jobOptions.placeholder"
+                     style="width:10vw;">
+            <el-option
+              v-for="(item, index) in jobOptions.items"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <el-button slot="append"
+                     icon="el-icon-search"
+                     @click="searchJob">搜索</el-button>
         </el-input>
       </el-col>
-      <el-col :span="8">
-        <el-button
-          @click="addDishDialog = true"
-          v-permission="['chef']"
-          class="dark-red-btn"
-          style="float: right"
-          >添加菜品</el-button
-        >
-        <el-button
-          @click="viewMyDish"
-          v-permission="['chef']"
-          class="dark-red-btn"
-          style="float: right;margin-right: 10px"
-        >
-          <span v-if="showAll">
-            查看我的菜品
-          </span>
-          <span v-else>
-            查看全部菜品
-          </span>
-        </el-button
-        >
-        <el-select
-          v-model="canteen"
-          placeholder="选择食堂"
-          style="width: 100%"
-          v-permission="['admin', 'user']"
-          @change="filterCanteen"
-        >
-          <el-option
-            v-for="(item, index) in canteenOptions"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-col>
-    </el-row>
 
+    </el-row>
     <item-line
       v-for="(i, ind) in itemLineList"
       :key="ind"
@@ -202,13 +169,24 @@ export default {
       updateDishDialog: false,
       itemLineList: [],
       AllitemList: [],
-      searchWord: "",
-      canteen: "",
-      canteenOptions: ["七食堂", "新食堂"],
       pagination: {
         curpage: 1,
-        size: 16,
+        size: 9,
         total: 0,
+      },
+      selectionForm:{
+        jobValue: "",
+        jobType:"",
+      },
+      jobOptions:{
+        placeholder: "职位类型",
+        items: [
+          { label: "近一个月", value: 1 },
+          { label: "近三个月", value: 3 },
+          { label: "近六个月", value: 6 },
+          { label: "近一年", value: 12 },
+          { label: "全部", value: -1 },
+        ],
       },
     };
   },
@@ -337,14 +315,14 @@ export default {
       let item = [];
       for (let i = 0; i < tmp.length; i++) {
         item.push(tmp[i]);
-        if ((i - 3) % 4 == 0) {
+        if ((i - 2) % 3 == 0) {
           this.itemLineList.push(item);
           item = [];
         }
       }
       if (item.length !== 0) this.itemLineList.push(item);
     },
-    handleSearch() {
+    searchJob(){
       if (this.searchWord === "") {
         this.getList();
         return;
@@ -463,12 +441,22 @@ export default {
 @import "~@/styles/variables.scss";
 
 .market-container {
-  padding: 20px 12%;
+  padding: 0px 12%;
 
   .line-style {
     &:not(:first-child) {
       margin-top: 25px;
     }
+  }
+
+
+  .el-input-group__prepend{
+    background-color: #fff
+  }
+
+  .el-input-group__append{
+    background-color: #ffbc5a;
+    color: #fff;
   }
 }
 

@@ -1,47 +1,30 @@
 <template>
   <el-card class="item-card-wrapper">
-    <el-image :src="cardInfo.imgSrc"></el-image>
-    <div class="info-wrapper">
+    <div class="info-wrapper"  @click="viewDetail">
       <el-scrollbar>
         <el-row type="flex" align="center">
-          <el-col :span="17" class="card-info-name">{{ cardInfo.name }}</el-col>
-          <el-col :span="5" class="card-info-cost"
-            >￥{{ cardInfo.cost }}</el-col
-          >
+          <el-col :span="16" class="card-info-name">
+            {{ cardInfo.name }}
+          </el-col>
+          <el-col :span="8" class="card-info-cost" style="text-align: right">
+            {{ cardInfo.cost }}
+          </el-col>
         </el-row>
+        <el-row class="card-info-detail small-text">
+          {{ cardInfo.canteen }}&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.seller }}&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.seller }}
+        </el-row>
+        <el-divider></el-divider>
         <el-row class="card-info-other">
-          {{ cardInfo.canteen }}-{{ cardInfo.seller }}
+          <el-col :span="4">
+            <el-image :src="cardInfo.imgSrc"></el-image>
+          </el-col>
+          <el-col :span="6">
+            公司名
+          </el-col>
+          <el-col :span="14" class="small-text">
+            公司名
+          </el-col>
         </el-row>
-        <el-row class="card-info-other">主要原料：</el-row>
-        <el-row class="card-info-other"
-          ><p style="text-indent: 30px; margin: 0">
-            {{ cardInfo.ingredient }}
-          </p></el-row
-        >
-        <el-row>
-          <i class="el-icon-delete icon-btn"
-             v-if="cardInfo.sellerId===id"
-             @click="deleteDish"></i>
-          <el-button
-            v-permission="['admin', 'user', 'chef']"
-            class="dark-red-btn"
-            size="mini"
-            style="float: right; margin-right: 10px; margin-top: 5px"
-            @click="viewDetail"
-            >浏览</el-button
-          >
-
-          <el-button
-            v-permission="['admin', 'chef']"
-            v-if="cardInfo.sellerId===this.id"
-            class="dark-red-btn"
-            size="mini"
-            style="float: right; margin-right: 10px; margin-top: 5px"
-            @click="updateDish"
-            >修改</el-button
-          >
-        </el-row>
-        <div style="height: 25px"></div>
       </el-scrollbar>
     </div>
   </el-card>
@@ -128,8 +111,8 @@ export default {
 .item-card-wrapper {
   padding: 0px;
   float: left;
-  width: calc(25% - 20px);
-  height: 350px;
+  width: calc(33% - 20px);
+  height: 165px;
 
   .el-scrollbar__wrap {
     overflow-x: hidden;
@@ -140,14 +123,19 @@ export default {
   }
 
   .el-image {
-    height: 200px;
+    height: 40px;
+    width: 40px;
   }
 
   .info-wrapper {
     width: 100%;
-    padding: 10px 8px 15px 15px;
-    height: 150px;
+    padding: 20px;
+    height: 165px;
     overflow: hidden;
+
+    .el-divider{
+      margin: 14px 0;
+    }
 
     .card-info-name {
       font-weight: bold;
@@ -158,9 +146,21 @@ export default {
       color: red;
     }
 
-    .card-info-other {
+    .card-info-detail{
       color: #606266;
       margin-top: 5px;
+
+    }
+
+    .card-info-other {
+      color: #606266;
+      height: 40px;
+      line-height: 35px;
+      vertical-align: middle;
+    }
+
+    .small-text{
+      color: #909399;
     }
   }
 }
