@@ -153,7 +153,7 @@ export default {
     color: white;
     .el-button {
       width: 240px;
-      height: 50px;
+      height: 56px;
       background-color: rgb(255, 188, 0);
       font-size: 20px;
       color: white;

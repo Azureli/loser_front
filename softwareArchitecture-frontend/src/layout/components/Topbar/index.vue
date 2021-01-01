@@ -59,8 +59,8 @@ export default {
 <style lang="scss" scoped>
 @import '../../../styles/variables.scss';
   .topbar-wrapper{
-    line-height: 58px;
-    height: 58px;
+    line-height: 70px;
+    height: 70px;
     width:100%;
     overflow: hidden;
     background-color: $menuBg;
@@ -69,7 +69,7 @@ export default {
 
   .top-menu{
     display: inline-block;
-    height: 56px;
+    height: 65px;
     border:1px solid $menuBg;
     width: calc(100% - 300px);
     margin-left: 15px;
