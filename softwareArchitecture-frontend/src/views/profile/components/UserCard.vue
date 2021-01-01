@@ -1,33 +1,29 @@
 <template>
   <el-card style="margin-bottom: 20px">
-    <div slot="header" class="clearfix">
-      <span>About me</span>
-    </div>
+    <span>About me</span>
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb
-          :image="user.avatar"
-          :height="'100px'"
-          :width="'100px'"
-          :hoverable="false"
-        >
+        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
           <div>Hello</div>
-          {{ user.role }}
+          {{user.role}}
         </pan-thumb>
       </div>
-      <div class="box-center">
-        <div class="user-name text-center">{{ name }}</div>
-        <div class="user-role text-center text-muted">
+      <div class="box-right">
+        <p>姓名：{{name}}</p>
+        <p>生日：{{birth}}</p>
+        <p>联系方式： {{tel}}</p>
+        <!-- <div class="user-role text-center text-muted">
           {{ user.role | uppercaseFirst }}<span v-permission="['admin', 'chef']">-{{ canteen }}</span>
-        </div>
+        </div>-->
       </div>
     </div>
 
     <div class="user-bio" v-permission="['admin', 'chef']">
       <div class="user-bio-section">
         <div class="user-bio-section-header">
-          <i class="el-icon-edit" /><span>修改信息</span>
+          <i class="el-icon-edit" />
+          <span>修改信息</span>
         </div>
         <div class="user-bio-section-body">
           <el-form v-model="selfForm" label-width="80px">
@@ -46,31 +42,33 @@
                   :key="index"
                   :label="item.label"
                   :value="item.value"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button class="dark-red-btn" size="mini" @click="changeSelf"
-                >修改</el-button
-              >
+              <el-button class="dark-red-btn" size="mini" @click="changeSelf">修改</el-button>
             </el-form-item>
           </el-form>
         </div>
       </div>
     </div>
-    <!-- <div class="user-bio">
+    <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="education" />
+          <span>个人简介</span>
+        </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">
-            JS in Computer Science from the University of Technology
-          </div>
+          <div class="text-muted">{{introduction}}</div>
         </div>
       </div>
+      <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改个人信息</el-button>
 
-      <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+      <!-- <div class="user-skills user-bio-section">
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="skill" />
+          <span>个人技能</span>
+        </div>
         <div class="user-bio-section-body">
           <div class="progress-item">
             <span>Vue</span>
@@ -89,8 +87,8 @@
             <el-progress :percentage="100" status="success" />
           </div>
         </div>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
   </el-card>
 </template>
 
@@ -104,7 +102,7 @@ export default {
   components: { PanThumb },
   directives: { permission },
   computed: {
-    ...mapGetters(["id", "canteen", "name"]),
+    ...mapGetters(["id", "canteen", "name"])
   },
   props: {
     user: {
@@ -112,20 +110,28 @@ export default {
       default: () => {
         return {
           name: "",
+          birth: "1999.9.9",
+          tel: "8888888",
           email: "",
           avatar: "",
-          role: "",
+          role: ""
         };
-      },
-    },
+      }
+    }
   },
   data() {
     return {
       canteenOptions: [],
+      introduction: "山东蓝翔山东蓝开挖掘机山东蓝翔山东蓝开挖掘机山东蓝翔山东蓝开挖掘机山东蓝翔山东蓝开挖掘机山东蓝翔山东蓝开挖掘机",
+      name: "333",
+      birth: "2020.1.1",
+      tel: "156156156",
       selfForm: {
         name: this.user.name,
-        canteen: "",
-      },
+        birth: this.user.birth,
+        tel: this.user.tel,
+        canteen: ""
+      }
     };
   },
   methods: {
@@ -137,7 +143,7 @@ export default {
       fd.append("userId", this.id);
 
       changeUserInfo(fd)
-        .then((res) => {
+        .then(res => {
           console.log(res);
           let name = "";
           for (let i of this.canteenOptions) {
@@ -150,32 +156,14 @@ export default {
           this.$store.commit("user/SET_NAME", this.selfForm.name);
           this.$message({
             message: "修改成功",
-            type: "success",
+            type: "success"
           });
           console.log(this.name);
         })
-        .catch((res) => {
+        .catch(res => {
           console.log(res);
         });
     },
-    getCanteenList() {
-      fetchCanteenList()
-        .then((res) => {
-          console.log(res);
-          this.canteenOptions = res.list.map((cur) => {
-            return {
-              value: cur.id,
-              label: cur.name,
-            };
-          });
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    },
-  },
-  mounted() {
-    this.getCanteenList();
   },
 };
 </script>
@@ -184,10 +172,16 @@ export default {
 .box-center {
   margin: 0 auto;
   display: table;
+  float: left;
+}
+.box-right {
+  margin-left: 40%;
+  display: table;
 }
 
 .text-muted {
   color: #777;
+  text-align: left;
 }
 
 .user-profile {
@@ -221,6 +215,7 @@ export default {
 .user-bio {
   margin-top: 20px;
   color: #606266;
+  text-align: center;
 
   span {
     padding-left: 4px;
@@ -229,13 +224,30 @@ export default {
   .user-bio-section {
     font-size: 14px;
     padding: 15px 0;
+   
+
 
     .user-bio-section-header {
       border-bottom: 1px solid #dfe6ec;
       padding-bottom: 10px;
       margin-bottom: 10px;
       font-weight: bold;
+      text-align: left;
     }
   }
 }
+ .el-button {
+      width: 200px;
+      height: 56px;
+      background-color: rgb(255, 188, 0);
+      font-size: 20px;
+      color: white;
+      border: 0ch;
+      font-weight: bold;
+      margin-top: 0.5%;
+      
+    }
+    .el-button :hover {
+      color: rgb(255, 234, 188);
+    }
 </style>

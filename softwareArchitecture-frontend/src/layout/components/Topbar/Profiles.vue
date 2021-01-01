@@ -8,8 +8,8 @@
         <i class="el-icon-caret-bottom" />
       </div>
       <el-dropdown-menu slot="dropdown">
-        <router-link to="/">
-          <el-dropdown-item>职位中心</el-dropdown-item>
+        <router-link to="/profile">
+          <el-dropdown-item>个人中心</el-dropdown-item>
         </router-link>
         <a
           target="_blank"
