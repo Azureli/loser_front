@@ -79,7 +79,7 @@ export const constantRoutes = [
         path: 'market',
         component: () => import('@/views/market/index'),
         name: 'Market',
-        meta: { title: '商城', icon: 'el-icon-s-shop', affix: true }
+        meta: { title: '职位中心', icon: 'el-icon-s-shop', affix: true }
       }
     ]
   },

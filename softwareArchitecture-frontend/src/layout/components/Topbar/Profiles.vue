@@ -9,7 +9,7 @@
       </div>
       <el-dropdown-menu slot="dropdown">
         <router-link to="/">
-          <el-dropdown-item>商城</el-dropdown-item>
+          <el-dropdown-item>职位中心</el-dropdown-item>
         </router-link>
         <a
           target="_blank"
