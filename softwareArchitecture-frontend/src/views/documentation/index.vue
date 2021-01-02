@@ -1,5 +1,5 @@
 <template>
-  <el-row class="dish-container">
+  <el-row class="cv-container">
     <div class="grey-head">
       <h2>
         {{position}}
@@ -25,7 +25,6 @@
       <el-card>
         <el-image :src="src"></el-image>
         <p class="title">{{company}}</p>
-        <h3>公司简介</h3>
         <el-divider></el-divider>
         <h5>岗位数量</h5>
         <p>{{staffnum}}</p>
@@ -96,7 +95,7 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.dish-container {
+.cv-container {
   text-align: left;
   margin: 0% 0% 0% 0%;
   padding: 0;
