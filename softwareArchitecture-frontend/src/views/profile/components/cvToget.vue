@@ -13,7 +13,7 @@
     <el-col :span="8" style="height:100%">
       <el-row class="icon-ui" type="flex" align="middle" justify="center">
         <el-col :span="6">
-          <i class="el-icon-view"></i>
+          <i class="el-icon-view" @click="viewResume"></i>
         </el-col>
         <el-col :span="6">
           <i class="el-icon-edit"></i>
@@ -58,6 +58,10 @@ export default {
     showdetails() {
       this.$router.push({ path: "/detail" });
     },
+    viewResume(){
+      console.log(1)
+      this.$router.push({path:"/viewResume/index"})
+    }
   },
 };
 </script>

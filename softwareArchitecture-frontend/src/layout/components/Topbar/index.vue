@@ -3,7 +3,8 @@
   <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
     <el-row type="flex" align="middle" class="topbar-wrapper">
       <logo />
-      <el-menu
+      <div style="width:calc(100% - 300px);"></div>
+      <!-- <el-menu
         :default-active="activeMenu"
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
@@ -17,7 +18,7 @@
           :item="route"
           :base-path="route.path"
         />
-      </el-menu>
+      </el-menu> -->
       <profiles />
     </el-row>
   <!-- </el-scrollbar> -->

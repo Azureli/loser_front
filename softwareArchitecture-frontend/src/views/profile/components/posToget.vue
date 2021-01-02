@@ -91,6 +91,7 @@ export default {
   border: 1px solid;
   border-color: rgba(222, 222, 222, 0.2);
   padding: 1%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   .buttonstate{
     width:80px;
     height:36px;
