@@ -90,6 +90,7 @@ export default {
 .div-toget {
   border: 1px solid;
   border-color: rgba(222, 222, 222, 0.2);
+  height: 150px;
   padding: 1%;
   .buttonstate{
     width:80px;
