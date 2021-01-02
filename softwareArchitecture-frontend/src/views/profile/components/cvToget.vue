@@ -68,11 +68,13 @@ export default {
 
 <style lang="scss" scope>
 .div-toget {
-  border: 1px solid;
-  border-color: rgba(222, 222, 222, 0.2);
+  // border: 1px solid;
+  // border-color: rgba(222, 222, 222, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  border-radius: 2px;
   padding: 1%;
   margin: 1%;
-  background-color: azure;
+  // background-color: azure;
   height: 120px;
 }
 
