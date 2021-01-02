@@ -100,9 +100,8 @@ export default {
     float: right;
     border:0ch;
     margin: 1%;
-    padding-top: 0.9%;
+    line-height:36px; 
     color:white;
-    vertical-align: middle;
 
 
   }
