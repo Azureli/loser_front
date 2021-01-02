@@ -1,19 +1,28 @@
 <template>
   <el-row class="div-toget">
-    <h3>{{CvInfo.name}}</h3>
-
-    <h4>
-      <span class="salary">薪资{{CvInfo.salary}}</span>
-      <el-divider direction="vertical"></el-divider>
-      <span>{{CvInfo.commend}}</span>
-      <el-divider direction="vertical"></el-divider>
-      <span>{{CvInfo.edu}}</span>
-      <div class="icon-ui">
-        <i class="el-icon-view"></i>
-        <i class="el-icon-edit"></i>
-        <i class="el-icon-delete"></i>
-      </div>
-    </h4>
+    <el-col :span="16">
+      <h3>{{ CvInfo.name }}</h3>
+      <h4>
+        <span class="salary">薪资{{ CvInfo.salary }}</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>{{ CvInfo.commend }}</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>{{ CvInfo.edu }}</span>
+      </h4>
+    </el-col>
+    <el-col :span="8" style="height:100%">
+      <el-row class="icon-ui" type="flex" align="middle" justify="center">
+        <el-col :span="6">
+          <i class="el-icon-view"></i>
+        </el-col>
+        <el-col :span="6">
+          <i class="el-icon-edit"></i>
+        </el-col>
+        <el-col :span="6">
+          <i class="el-icon-delete"></i>
+        </el-col>
+      </el-row>
+    </el-col>
   </el-row>
 </template>
 
@@ -26,7 +35,7 @@ export default {
   name: "CvToget",
   directives: { permission },
   computed: {
-    ...mapGetters(["id"])
+    ...mapGetters(["id"]),
   },
   props: {
     CvInfo: {
@@ -37,10 +46,10 @@ export default {
           posid: "1",
           commend: "能上刀山下火海",
           salary: "12K",
-          edu: "小学毕业"
+          edu: "小学毕业",
         };
-      }
-    }
+      },
+    },
   },
   data() {
     return {};
@@ -48,8 +57,8 @@ export default {
   methods: {
     showdetails() {
       this.$router.push({ path: "/detail" });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -67,14 +76,26 @@ export default {
   color: rgba(255, 61, 61, 0.719);
 }
 .icon-ui {
-  width:200px;
-  height: 50px;
+  // width: 200px;
+  // height: 50px;
+  height:100%;
   color: rgb(255, 188, 0);
-  font-size: 35px;
-  float: right;
-  margin-bottom: 5%;
+
+  i{
+    font-size: 30px;
+    cursor: pointer;
+
+    &:hover{
+      color:  rgb(235, 172, 1);
+    }
+  }
+  // font-size: 35px;
+  // float: right;
+  // margin-bottom: 5%;
 }
-.el-icon-view,.el-icon-edit,.el-icon-delete{
+.el-icon-view,
+.el-icon-edit,
+.el-icon-delete {
   margin: 3%;
 }
 </style>
