@@ -1,6 +1,6 @@
 <template>
   <el-card style="margin-bottom: 20px">
-    <span>About me</span>
+    <span>About</span>
 
     <div class="user-profile">
       <div class="box-center">
@@ -9,60 +9,29 @@
           {{user.role}}
         </pan-thumb>
       </div>
-      <div class="box-right">
+      <div class="box-right" v-permission="['user']">
         <p>姓名：{{name}}</p>
         <p>生日：{{birth}}</p>
         <p>联系方式： {{tel}}</p>
-        <!-- <div class="user-role text-center text-muted">
-          {{ user.role | uppercaseFirst }}<span v-permission="['admin', 'chef']">-{{ canteen }}</span>
-        </div>-->
+      </div>
+       <div class="box-right" v-permission="['chef']">
+        <p>公司名称{{name}}</p>
+        <p>岗位数量{{posNum}}</p>
       </div>
     </div>
 
-    <div class="user-bio" v-permission="['admin', 'chef']">
-      <div class="user-bio-section">
-        <div class="user-bio-section-header">
-          <i class="el-icon-edit" />
-          <span>修改信息</span>
-        </div>
-        <div class="user-bio-section-body">
-          <el-form v-model="selfForm" label-width="80px">
-            <el-form-item label="商家名称">
-              <el-input v-model="selfForm.name" size="mini"></el-input>
-            </el-form-item>
-            <el-form-item label="隶属食堂">
-              <el-select
-                v-model="selfForm.canteen"
-                placeholder="选择食堂"
-                style="width: 100%"
-                size="mini"
-              >
-                <el-option
-                  v-for="(item, index) in canteenOptions"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button class="dark-red-btn" size="mini" @click="changeSelf">修改</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-    </div>
     <div class="user-bio">
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header">
           <svg-icon icon-class="education" />
-          <span>个人简介</span>
+          <span v-permission="['user']">个人简介</span>
+          <span v-permission="['chef']">公司简介</span>
         </div>
         <div class="user-bio-section-body">
           <div class="text-muted">{{introduction}}</div>
         </div>
       </div>
-      <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改个人信息</el-button>
+      <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改信息</el-button>
 
       <!-- <div class="user-skills user-bio-section">
         <div class="user-bio-section-header">
@@ -112,6 +81,7 @@ export default {
           name: "",
           birth: "1999.9.9",
           tel: "8888888",
+          posNum:"1000",
           email: "",
           avatar: "",
           role: ""
@@ -126,6 +96,7 @@ export default {
       name: "333",
       birth: "2020.1.1",
       tel: "156156156",
+      posNum:"1000",
       selfForm: {
         name: this.user.name,
         birth: this.user.birth,

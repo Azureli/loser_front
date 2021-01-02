@@ -13,9 +13,11 @@
 <script>
 import { confirmOrder } from "@/api/myApis.js";
 import { mapGetters } from "vuex";
+import permission from "@/directive/permission/index.js";
 
 export default {
   name: "PosToget",
+  directives: { permission },
   computed: {
     ...mapGetters(["id"])
   },
