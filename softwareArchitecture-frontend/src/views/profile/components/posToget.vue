@@ -1,10 +1,10 @@
 <template>
-  <el-row  class="div-toget" :style="changecolor(PosInfo.state)">
+  <el-row  class="div-get" :style="changecolor(PosInfo.state)">
     <div class="buttonstate" :style="buttoncolor(PosInfo.state)">{{PosInfo.textstate}}</div>
     <h3>{{PosInfo.name}}</h3>
     
     <h4>投递时间:{{PosInfo.time}}<span class="salary">薪资{{PosInfo.salary}}</span></h4>
-      <el-link class="cancel" @click="cancel">取消申请</el-link>
+      <el-link class="cancel" type="danger" @click="cancel">取消申请</el-link>
     <el-link class="posdetail" @click="showdetails">岗位详情</el-link>
   
   </el-row>
@@ -46,16 +46,16 @@ export default {
       //2 通过
       if (state == "1") {
         return {
-          background: "rgba(100,100,250,0.1)"
+          background: "#F4F4F5"
         };
       }
       if (state == "2")
         return {
-          background: "rgba(100,250,100,0.1)"
+          background: "#F0F9EB"
         };
       if (state == "0")
         return {
-          background: "rgba(250,100,100,0.1)"
+          background: "rgba(254,240,240,0.9)"
         };
     },
     buttoncolor(state) {
@@ -64,16 +64,16 @@ export default {
       //2 通过
       if (state == "1") {
         return {
-          background: "rgba(100,100,250,0.5)"
+          background: "#909399"
         };
       }
       if (state == "2")
         return {
-          background: "rgba(100,250,100,0.5)"
+          background: "#67C23A"
         };
       if (state == "0")
         return {
-          background: "rgba(250,100,100,0.5)"
+          background: "#F56C6C"
         };
     },
     cancel(){
@@ -87,10 +87,9 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.div-toget {
+.div-get {
   border: 1px solid;
   border-color: rgba(222, 222, 222, 0.2);
-  height: 150px;
   padding: 1%;
   .buttonstate{
     width:80px;
@@ -101,7 +100,10 @@ export default {
     float: right;
     border:0ch;
     margin: 1%;
-    padding-top: 1%;
+    line-height:36px; 
+    color:white;
+
+
   }
 
   .salary{
