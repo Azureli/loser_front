@@ -11,7 +11,7 @@
       </el-col>
 
       <el-col :span="6" :xs="24" :offset="1">
-        <user-card :user="user" @addJob="changDialog" />
+        <user-card :user="user" @addJob="changeAddDialog" />
       </el-col>
     </div>
 
@@ -22,10 +22,11 @@
           :key="ind"
           :CvInfo="i"
           v-on:updatecvList="updatecvList"
+          @editJob="changeEditDialog"
         />
       </el-col>
     </div>
-    <el-dialog title="发布职位" :visible.sync="showDialog">
+    <el-dialog title="发布职位" :visible.sync="showAddDialog">
       <el-form :model="addForm" label-position="left" label-width="120px">
         <el-form-item label="职位名称">
           <el-input v-model="addForm.position"></el-input>
@@ -86,6 +87,67 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog title="编辑职位" :visible.sync="showUpdateDialog">
+      <el-form :model="updateForm" label-position="left" label-width="120px">
+        <el-form-item label="职位名称">
+          <el-input v-model="updateForm.position"></el-input>
+        </el-form-item>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="截止日期">
+              <!--<el-input v-model="addForm.endTime"></el-input>-->
+              <el-date-picker
+                v-model="updateForm.endTime"
+                type="date"
+                placeholder="选择日期"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" :offset="2">
+            <el-form-item label="工作地点">
+              <el-select v-model="updateForm.location">
+                <el-option
+                  v-for="(item, index) in jobOptions.items"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="工作内容">
+          <el-input v-model="updateForm.task"></el-input>
+        </el-form-item>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="薪酬（千）">
+              <!--<el-input v-model="addForm.salary"></el-input>-->
+              <el-input-number v-model="updateForm.salary" :precision="2" :step="1"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" :offset="2">
+            <el-form-item label="招聘人数">
+              <!--<el-input v-model="addForm.people"></el-input>-->
+              <el-input-number v-model="updateForm.people" :step="1" step-strictly></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="职位要求">
+          <el-input v-model="updateForm.requirement"></el-input>
+        </el-form-item>
+        <el-form-item label="联系邮箱">
+          <el-input v-model="updateForm.hr"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="dark-red-btn" @click="updateJobComfirm"
+          >确定</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -99,7 +161,7 @@ import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
 import { viewmyInfo, viewmypost, viewallpos } from "@/api/myApis.js";
-import { addRecruitment} from "@/api/myApis";
+import { addRecruitment,updateRecruitment} from "@/api/myApis";
 
 export default {
   name: "Profile",
@@ -107,7 +169,9 @@ export default {
   components: { UserCard, Activity, Timeline, Account, PosToget, CvToget },
   data() {
     return {
-      showDialog: false,
+      showAddDialog: false,
+      showUpdateDialog: false,
+      choosenJodId:-1,
       user: {},
       activeTab: "activity",
       itemList: [],
@@ -172,6 +236,17 @@ export default {
         hr:'',
         endTime:'',
       },
+      updateForm:{
+        companyId:'',
+        position:'',
+        location:'',
+        task:'',
+        salary:0,
+        requirement:'',
+        people:0,
+        hr:'',
+        endTime:'',
+      },
       jobOptions:{
         placeholder: "城市",
         items: [
@@ -209,8 +284,12 @@ export default {
     }
   },
   methods: {
-    changDialog(){
-      this.showDialog = true;
+    changeAddDialog(){
+      this.showAddDialog = true;
+    },
+    changeEditDialog(data){
+      this.updateForm= data;
+      this.showUpdateDialog = true;
     },
     addJobComfirm(){
       console.log(this.id)
@@ -236,12 +315,53 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.$message({
+            showClose: true,
+            message: '发布成功！',
+            type: 'success'
+          });
           this.getallpos();
-          this.showDialog = false;
+          this.showAddDialog = false;
         })
         .catch((res) => {
           console.log(res);
-          this.showDialog = false;
+          this.showAddDialog = false;
+        });
+    },
+    updateJobComfirm(){
+      if(this.updateForm.position===''||this.updateForm.location===''||this.updateForm.task===''||
+        this.updateForm.requirement===''||this.updateForm.hr===''||this.updateForm.endTime===''){
+        this.$message({
+          showClose: true,
+          message: '请完善岗位信息！',
+          type: 'warning'
+        });
+        return;
+      }
+      updateRecruitment({
+        id:this.updateForm.recruitmentId,
+        position:this.updateForm.position,
+        location:this.updateForm.location,
+        task:this.updateForm.task,
+        salary:this.updateForm.salary,
+        requirement:this.updateForm.requirement,
+        people:this.updateForm.people,
+        hr:this.updateForm.hr,
+        endTime:this.updateForm.endTime,
+      })
+        .then((res) => {
+          console.log(res);
+          this.$message({
+            showClose: true,
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.getallpos();
+          this.showUpdateDialog = false;
+        })
+        .catch((res) => {
+          console.log(res);
+          this.showUpdateDialog = false;
         });
     },
     getList() {},

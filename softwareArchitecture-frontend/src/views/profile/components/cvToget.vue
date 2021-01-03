@@ -16,7 +16,7 @@
           <i class="el-icon-view" @click="viewResume"></i>
         </el-col>
         <el-col :span="6">
-          <i class="el-icon-edit"></i>
+          <i class="el-icon-edit" @click="toParent"></i>
         </el-col>
         <el-col :span="6">
           <i class="el-icon-delete"></i>
@@ -55,6 +55,9 @@ export default {
     return {};
   },
   methods: {
+    toParent(){
+      this.$emit('editJob', this.CvInfo)
+    },
     showdetails() {
       this.$router.push({ path: "/detail" });
     },
