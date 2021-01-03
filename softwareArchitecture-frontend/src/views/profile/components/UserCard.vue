@@ -33,6 +33,32 @@
         </div>
       </div>
       <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改信息</el-button>
+      <el-button @click="toParent" v-permission="['chef']">发布岗位</el-button>
+
+      <!-- <div class="user-skills user-bio-section">
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="skill" />
+          <span>个人技能</span>
+        </div>
+        <div class="user-bio-section-body">
+          <div class="progress-item">
+            <span>Vue</span>
+            <el-progress :percentage="70" />
+          </div>
+          <div class="progress-item">
+            <span>JavaScript</span>
+            <el-progress :percentage="18" />
+          </div>
+          <div class="progress-item">
+            <span>Css</span>
+            <el-progress :percentage="12" />
+          </div>
+          <div class="progress-item">
+            <span>ESLint</span>
+            <el-progress :percentage="100" status="success" />
+          </div>
+        </div>
+      </div> -->
     </div>
   </el-card>
 </template>
@@ -94,7 +120,9 @@ export default {
         })
         .catch(res => {
           console.log(res);
-        });
+        })},
+    toParent(){
+      this.$emit('addJob', true)
     },
     changeSelf() {
       console.log(this.selfForm);
@@ -195,6 +223,8 @@ export default {
     font-size: 14px;
     padding: 15px 0;
 
+
+
     .user-bio-section-header {
       border-bottom: 1px solid #dfe6ec;
       padding-bottom: 10px;
@@ -204,17 +234,19 @@ export default {
     }
   }
 }
-.el-button {
-  width: 200px;
-  height: 56px;
-  background-color: rgb(255, 188, 0);
-  font-size: 20px;
-  color: white;
-  border: 0ch;
-  font-weight: bold;
-  margin-top: 0.5%;
-}
-.el-button :hover {
-  color: rgb(255, 234, 188);
-}
+ .el-button {
+      width: 200px;
+      height: 56px;
+      background-color: rgb(255, 188, 0);
+      font-size: 20px;
+      color: white;
+      border: 0ch;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-left: 0;
+
+    }
+    .el-button :hover {
+      color: rgb(255, 234, 188);
+    }
 </style>

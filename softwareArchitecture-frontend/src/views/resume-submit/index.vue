@@ -124,6 +124,8 @@
             education:this.educationText,
             skill:this.skillText,
             experience:this.workText,
+            extra:this.otherText,
+            avatar:this.avatar,
           }).then(res=>{
             if(res.code===200){
               let resumeId = res.data;
