@@ -23,6 +23,7 @@
           :CvInfo="i"
           v-on:updatecvList="updatecvList"
           @editJob="changeEditDialog"
+          @deleteJob="handleDeleteJob"
         />
       </el-col>
     </div>
@@ -148,6 +149,24 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog title="编辑公司信息" :visible.sync="showCompanyDialog" width="30%">
+      <el-form :model="companyForm" label-width="80px">
+        <el-form-item label="公司标志">
+          <el-input v-model="companyForm.icon"></el-input>
+        </el-form-item>
+        <el-form-item label="联系号码">
+          <el-input v-model="companyForm.contact"></el-input>
+        </el-form-item>
+        <el-form-item label="公司介绍">
+          <el-input v-model="companyForm.introduction"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="showCompanyDialog = false">取 消</el-button>
+          <el-button type="primary" @click="updateCompanyComfirm">确 定</el-button>
+        </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -161,7 +180,7 @@ import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
 import { viewmyInfo, viewmypost, viewallpos,viewmycv } from "@/api/myApis.js";
-import { addRecruitment,updateRecruitment,getcvList} from "@/api/myApis";
+import { addRecruitment,updateRecruitment,updateCompanyInfo,getcvList} from "@/api/myApis";
 
 export default {
   name: "Profile",
@@ -169,6 +188,7 @@ export default {
   components: { UserCard, Activity, Timeline, Account, PosToget, CvToget },
   data() {
     return {
+      showCompanyDialog:false,
       showAddDialog: false,
       showUpdateDialog: false,
       choosenJodId:-1,
@@ -200,6 +220,11 @@ export default {
         people:0,
         hr:'',
         endTime:'',
+      },
+      companyForm:{
+        icon:'',
+        intro:'',
+        contract:'',
       },
       jobOptions:{
         placeholder: "城市",
@@ -238,6 +263,9 @@ export default {
     }
   },
   methods: {
+    handleDeleteJob(data){
+
+    },
     changeAddDialog(){
       this.showAddDialog = true;
     },
@@ -316,6 +344,36 @@ export default {
         .catch((res) => {
           console.log(res);
           this.showUpdateDialog = false;
+        });
+    },
+    updateCompanyComfirm(){
+      // if(this.companyForm.icon===''||this.companyForm.introduction===''||this.companyForm.contact===''){
+      //   this.$message({
+      //     showClose: true,
+      //     message: '请完善公司信息！',
+      //     type: 'warning'
+      //   });
+      //   return;
+      // }
+      updateCompanyInfo({
+        id:this.id,
+        contact:this.companyForm.contact,
+        icon:this.companyForm.icon,
+        introduction:this.companyForm.introduction,
+      })
+        .then((res) => {
+          console.log(res);
+          this.$message({
+            showClose: true,
+            message: '修改成功！',
+            type: 'success'
+          });
+          //这里应该还要刷新当前页的公司信息
+          this.showCompanyDialog = false;
+        })
+        .catch((res) => {
+          console.log(res);
+          this.showCompanyDialog = false;
         });
     },
     getList() {},

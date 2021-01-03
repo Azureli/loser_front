@@ -12,15 +12,15 @@
     </el-col>
     <el-col :span="8" style="height:100%">
       <el-row class="icon-ui" type="flex" align="middle" justify="center">
-        <el-col :span="6">
+        <el-col :span="6" :offset="6">
           <i class="el-icon-view" @click="viewResume"></i>
         </el-col>
         <el-col :span="6">
-          <i class="el-icon-edit" @click="toParent"></i>
+          <i class="el-icon-edit" @click="toParentEdit"></i>
         </el-col>
-        <el-col :span="6">
-          <i class="el-icon-delete"></i>
-        </el-col>
+        <!--<el-col :span="6">-->
+          <!--<i class="el-icon-delete"  @click="toParentDelete"></i>-->
+        <!--</el-col>-->
       </el-row>
     </el-col>
   </el-row>
@@ -61,8 +61,11 @@ export default {
     return {};
   },
   methods: {
-    toParent(){
+    toParentEdit(){
       this.$emit('editJob', this.CvInfo)
+    },
+    toParentDelete(){
+      this.$emit('deleteJob', this.CvInfo.recruitmentId)
     },
     showdetails() {
       this.$router.push({ path: "/detail" });

@@ -116,10 +116,11 @@ export function updateRecruitment(data) {
   })
 }
 
-export function viewOrderNow(data) {
+export function updateCompanyInfo(data) {
   return request ({
-    url: '/viewOrderNow',
-    method: "post",
+    url: 'company/companyInfo?companyId='+data.id+'&contact='+data.contact+'&icon='+data.icon+
+    '&introduction='+data.introduction,
+    method: "put",
     data
   })
 }
