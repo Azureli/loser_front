@@ -27,10 +27,20 @@
     </div>
     <el-dialog title="发布职位" :visible.sync="showDialog">
       <el-form :model="addForm" label-position="left" label-width="120px">
+        <el-form-item label="职位名称">
+          <el-input v-model="addForm.position"></el-input>
+        </el-form-item>
         <el-row>
           <el-col :span="11">
-            <el-form-item label="职位名称">
-              <el-input v-model="addForm.position"></el-input>
+            <el-form-item label="截止日期">
+              <!--<el-input v-model="addForm.endTime"></el-input>-->
+              <el-date-picker
+                v-model="addForm.endTime"
+                type="date"
+                placeholder="选择日期"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="11" :offset="2">
@@ -68,9 +78,6 @@
         </el-form-item>
         <el-form-item label="联系邮箱">
           <el-input v-model="addForm.hr"></el-input>
-        </el-form-item>
-        <el-form-item label="截止日期">
-          <el-input v-model="addForm.endTime"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button class="dark-red-btn" @click="addJobComfirm"
@@ -206,8 +213,18 @@ export default {
       this.showDialog = true;
     },
     addJobComfirm(){
+      console.log(this.id)
+      if(this.addForm.position===''||this.addForm.location===''||this.addForm.task===''||this.addForm.requirement===''||
+        this.addForm.hr===''||this.addForm.endTime===''){
+        this.$message({
+          showClose: true,
+          message: '请完善岗位信息！',
+          type: 'warning'
+        });
+        return;
+      }
       addRecruitment({
-        companyId:this.id,
+        id:this.id,
         position:this.addForm.position,
         location:this.addForm.location,
         task:this.addForm.task,
@@ -219,6 +236,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.getallpos();
           this.showDialog = false;
         })
         .catch((res) => {
