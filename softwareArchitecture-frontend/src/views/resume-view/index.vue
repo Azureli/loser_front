@@ -26,25 +26,42 @@
           ></el-table-column>
           <el-table-column label="操作" width="175" fixed="right">
             <template slot-scope="scope">
-               <el-tooltip class="item" effect="dark" content="查看简历" placement="top">
-              <i
-                @click="handleClick(scope.row)"
-                size="mini"
-                class="el-icon-view"
-              ></i>
-               </el-tooltip>
-               <el-tooltip class="item" effect="dark" content="拒绝申请" placement="top">
-              <i
-                size="mini"
-                class="el-icon-circle-close"
-              ></i>
-               </el-tooltip>
-               <el-tooltip class="item" effect="dark" content="通过申请" placement="top">
-              <i
-                size="mini"
-                class="el-icon-circle-check"
-              ></i>
-            </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="查看简历"
+                placement="top"
+              >
+                <i
+                  @click="handleClick(scope.row)"
+                  size="mini"
+                  class="el-icon-view"
+                ></i>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="拒绝申请"
+                placement="top"
+              >
+                <i
+                  size="mini"
+                  @click="rejectResume(scope.row)"
+                  class="el-icon-circle-close"
+                ></i>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="通过申请"
+                placement="top"
+              >
+                <i
+                  size="mini"
+                  @click="acceptResume(scope.row)"
+                  class="el-icon-circle-check"
+                ></i>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -97,7 +114,8 @@
       </el-row>
       <div class="resume">
         <el-row class="title"> 教育经历 </el-row>
-        <el-row class="row-content">{{educationText}}
+        <el-row class="row-content"
+          >{{ educationText }}
           <!-- <el-input
             type="textarea"
             :rows="3"
@@ -107,7 +125,8 @@
           </el-input> -->
         </el-row>
         <el-row class="title"> 工作经历 </el-row>
-        <el-row class="row-content">{{workText}}
+        <el-row class="row-content"
+          >{{ workText }}
           <!-- <el-input
             type="textarea"
             :rows="3"
@@ -117,7 +136,8 @@
           </el-input> -->
         </el-row>
         <el-row class="title"> 工作技能 </el-row>
-        <el-row class="row-content">{{skillText}}
+        <el-row class="row-content"
+          >{{ skillText }}
           <!-- <el-input
             type="textarea"
             :rows="3"
@@ -127,7 +147,8 @@
           </el-input> -->
         </el-row>
         <el-row class="title"> 其他 </el-row>
-        <el-row class="row-content">{{otherText}}
+        <el-row class="row-content"
+          >{{ otherText }}
           <!-- <el-input
             type="textarea"
             :rows="3"
@@ -137,15 +158,29 @@
           </el-input> -->
         </el-row>
       </div>
-      <el-button @click="submitResume" class="big-btn" type="success" plain> 通过申请 </el-button>
-      <el-button @click="submitResume" class="big-btn" type="danger" plain> 拒绝申请 </el-button>
+      <el-button
+        @click="acceptResume(false)"
+        class="big-btn"
+        type="success"
+        plain
+      >
+        通过申请
+      </el-button>
+      <el-button
+        @click="rejectResume(false)"
+        class="big-btn"
+        type="danger"
+        plain
+      >
+        拒绝申请
+      </el-button>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import {getPeopleList} from "@/api/myApis"
+import { getPeopleList, rejectResume, acceptResume } from "@/api/myApis";
 export default {
   name: "viewResume",
 
@@ -174,32 +209,84 @@ export default {
         },
       ],
       canCloseFlag: false,
+      selectResumeId: "",
+      recruitmentId:""
     };
   },
-  mounted(){
-    console.log(this.$route.query.cvInfo)
-    this.getPeopleList(this.$route.query.cvInfo.recruitmentId)
+  mounted() {
+    console.log(this.$route.query.cvInfo);
+    this.recruitmentId = this.$route.query.cvInfo.recruitmentId
+    this.getPeopleList(this.$route.query.cvInfo.recruitmentId);
   },
   methods: {
-    getPeopleList(id){
-      getPeopleList(id).then(res => {
-        console.log(res)
-      }).catch(res => {
-        console.log(res)
-      })
+    getPeopleList(id) {
+      getPeopleList(id)
+        .then((res) => {
+          console.log(res);
+          this.tableData = res.data
+            .map((cur) => {
+              cur.time = cur.commitTime.substring(0, 10);
+              return cur;
+            })
+            .filter((cur) => {
+              return cur.status === "审核中";
+            });
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     },
-    submitResume() {
-      let fd = new FormData();
-      fd.append("name", name);
-      fd.append("birthday", birthday);
-      fd.append("intro", intro);
-      fd.append("educationText", educationText);
-      fd.append("workText", workText);
-      fd.append("skillText", skillText);
-      fd.append("otherText", otherText);
+    rejectResume(flag) {
+      let id = "";
+      if (!flag) id = this.selectResumeId;
+      else id = flag.id;
+      console.log(id);
+      rejectResume({ id: id, status: "未通过", message: "123" })
+        .then((res) => {
+          if (res.data === 1) {
+            this.$message({
+              message: "操作成功！",
+              type: "success",
+            });
+          }
+          this.getPeopleList(this.recruitmentId)
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    acceptResume(flag) {
+      let id = "";
+      if (!flag) id = this.selectResumeId;
+      else id = flag.id;
+      console.log(id);
+      acceptResume({ id: id, status: "已通过", message: "123" })
+        .then((res) => {
+          if (res.data === 1) {
+            this.$message({
+              message: "操作成功！",
+              type: "success",
+            });
+          }
+          this.getPeopleList(this.recruitmentId)
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     },
     handleClick(row) {
       console.log(row);
+      this.imgUrl = row.pic;
+      this.name = row.name;
+      this.birthday = row.birth ? row.birth.substring(0, 10) : "";
+      this.phone = row.contact;
+      this.intro = row.introduction;
+      this.educationText = row.education;
+      this.workText = row.experience;
+      this.skillText = row.skill;
+      this.otherText = row.extra;
+      this.selectResumeId = row.id;
+
       this.canCloseFlag = true;
       this.drawerVisible = false;
     },
@@ -282,7 +369,7 @@ span {
   font-size: 20px;
 }
 
-.row-content{
+.row-content {
   min-height: 50px;
   width: 100%;
 }
@@ -290,6 +377,7 @@ span {
 .resume {
   margin-left: 20px;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .big-btn {
@@ -305,15 +393,15 @@ span {
 }
 
 .el-table {
-  i{
+  i {
     font-size: 30px;
     cursor: pointer;
     color: rgb(255, 188, 0);
-    
-margin-right:15px;
-    
-    &:hover{
-      color:  rgb(235, 172, 1);
+
+    margin-right: 15px;
+
+    &:hover {
+      color: rgb(235, 172, 1);
     }
   }
 }
