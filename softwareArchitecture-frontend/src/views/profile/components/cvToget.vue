@@ -1,13 +1,13 @@
 <template>
   <el-row class="div-toget">
-    <el-col :span="16">
+    <el-col :span="15" :offset="1">
       <h3>{{ CvInfo.name }}</h3>
       <h4>
-        <span class="salary">薪资{{ CvInfo.salary }}</span>
+        <span class="salary">薪资{{ CvInfo.salary }}K</span>
         <el-divider direction="vertical"></el-divider>
-        <span>{{ CvInfo.commend }}</span>
+        <span>{{ CvInfo.location }}</span>
         <el-divider direction="vertical"></el-divider>
-        <span>{{ CvInfo.edu }}</span>
+        <span>{{ CvInfo.people }}人</span>
       </h4>
     </el-col>
     <el-col :span="8" style="height:100%">
@@ -42,11 +42,17 @@ export default {
       type: Object,
       default: () => {
         return {
-          name: "运营",
-          posid: "1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu: "小学毕业",
+          recruitmentId: 103,
+          companyId: 106,
+          position: "淘金者",
+          location: "撒哈拉沙漠",
+          task: "寻找金矿",
+          salary: 50,
+          requirement: "需要发现财富的眼力",
+          people: 2,
+          hr: "1232@xx.xx",
+          endTime: "2022-03-05T16:00:00.000+00:00",
+          extra: null
         };
       },
     },
@@ -60,7 +66,7 @@ export default {
     },
     viewResume(){
       console.log(1)
-      this.$router.push({path:"/viewResume/index"})
+      this.$router.push({path:"/viewResume/index", query:{cvInfo:this.CvInfo}})
     }
   },
 };

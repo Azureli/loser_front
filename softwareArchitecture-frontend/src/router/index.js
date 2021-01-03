@@ -137,17 +137,11 @@ export const constantRoutes = [
         meta: { title: '个人信息', icon: 'user', noCache: true }
       }
     ]
-  }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  },
   {
     path: '/viewResume',
     component: Layout,
+    redirect: '/viewResume/index',
     meta: { roles: ['admin','chef'] },
     children: [
       {
@@ -158,6 +152,13 @@ export const asyncRoutes = [
       }
     ]
   },
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: '/guide',
     component: Layout,

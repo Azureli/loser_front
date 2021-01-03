@@ -131,7 +131,7 @@
 import ItemLine from "./component/itemLine.vue";
 import {
   fetchJobs,
-  addDish,
+  // addDish,
   updateDish,
   fetchCanteenList,
   deleteDish,

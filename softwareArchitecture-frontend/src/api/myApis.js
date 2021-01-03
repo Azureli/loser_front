@@ -192,3 +192,10 @@ export function changeUserInfo(data) {
     data
   })
 }
+
+export function getPeopleList(id) {
+  return request ({
+    url: '/company/resume/' + id,
+    method: "get"
+  })
+}

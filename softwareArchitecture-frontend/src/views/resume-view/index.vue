@@ -145,6 +145,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import {getPeopleList} from "@/api/myApis"
 export default {
   name: "viewResume",
 
@@ -175,7 +176,18 @@ export default {
       canCloseFlag: false,
     };
   },
+  mounted(){
+    console.log(this.$route.query.cvInfo)
+    this.getPeopleList(this.$route.query.cvInfo.recruitmentId)
+  },
   methods: {
+    getPeopleList(id){
+      getPeopleList(id).then(res => {
+        console.log(res)
+      }).catch(res => {
+        console.log(res)
+      })
+    },
     submitResume() {
       let fd = new FormData();
       fd.append("name", name);
