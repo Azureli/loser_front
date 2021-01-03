@@ -20,7 +20,7 @@ export function viewJob(data){
 export function addResume(data) {
   return request({
     url:'user/resume?userId='+data.id+'&pic='+data.avatar+'&education='+data.education+
-    '&skill='+data.skill+'&experience='+data.experience,
+    '&skill='+data.skill+'&experience='+data.experience+'&extra='+data.extra,
     method:'post',
     data
   })
@@ -41,9 +41,11 @@ export function orderDish(data){
   })
 }
 
-export function addDish(data) {
+export function addRecruitment(data) {
   return request ({
-    url: '/addDish',
+    url: '/company/recruitment?companyId='+data.id+'&position='+data.position+'&location='+data.location+
+    '&task='+data.task+'&salary='+data.salary+'&requirement='+data.requirement+'&people='+data.people+
+    '&hr='+data.hr+ '&endTime='+data.endTime,
     method: "post",
     data
   })

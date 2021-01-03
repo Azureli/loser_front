@@ -32,6 +32,7 @@
         </div>
       </div>
       <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改信息</el-button>
+      <el-button @click="toParent" v-permission="['chef']">发布岗位</el-button>
 
       <!-- <div class="user-skills user-bio-section">
         <div class="user-bio-section-header">
@@ -71,7 +72,7 @@ export default {
   components: { PanThumb },
   directives: { permission },
   computed: {
-    ...mapGetters(["id", "canteen", "name"])
+    ...mapGetters(["id"])
   },
   props: {
     user: {
@@ -106,6 +107,9 @@ export default {
     };
   },
   methods: {
+    toParent(){
+      this.$emit('addJob', true)
+    },
     changeSelf() {
       console.log(this.selfForm);
       let fd = new FormData();
@@ -195,7 +199,7 @@ export default {
   .user-bio-section {
     font-size: 14px;
     padding: 15px 0;
-   
+
 
 
     .user-bio-section-header {
@@ -215,8 +219,9 @@ export default {
       color: white;
       border: 0ch;
       font-weight: bold;
-      margin-top: 0.5%;
-      
+      margin-top: 20px;
+      margin-left: 0;
+
     }
     .el-button :hover {
       color: rgb(255, 234, 188);
