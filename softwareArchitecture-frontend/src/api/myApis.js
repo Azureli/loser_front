@@ -1,10 +1,12 @@
 import request from '@/utils/request'
 
-export function fetchDishes(query) {
+
+
+export function fetchJobs(data) {
   return request({
-    url: '/getDishOnSale',
-    method: 'post',
-    params: query
+    url: 'user/recruitment?position&location&offset=0&limit=20',
+    method: 'get',
+    data
   })
 }
 export function viewDishDetail(data) {

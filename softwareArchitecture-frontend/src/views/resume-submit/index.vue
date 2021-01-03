@@ -200,5 +200,8 @@
     height: 45px;
     font-size: 1.1em;
   }
+  .el-button :hover {
+    color: rgb(255, 234, 188);
+  }
 
 </style>

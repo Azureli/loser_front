@@ -130,7 +130,7 @@
 <script>
 import ItemLine from "./component/itemLine.vue";
 import {
-  fetchDishes,
+  fetchJobs,
   addDish,
   updateDish,
   fetchCanteenList,
@@ -306,6 +306,7 @@ export default {
       this.getList();
     },
     getRealList() {
+      console.log(this.AllitemList)
       this.pagination.total = this.AllitemList.length;
       let tmp = this.AllitemList.slice(
         (this.pagination.curpage - 1) * this.pagination.size,
@@ -331,7 +332,6 @@ export default {
       fd.append("keyword", this.searchWord);
       searchDish(fd)
         .then((res) => {
-          console.log(res);
           this.AllitemList = res.list.map((cur) => {
             return {
               imgSrc: "http://127.0.0.1:8000/" + cur.url,
@@ -353,20 +353,26 @@ export default {
     },
     getList() {
       this.AllitemList = [];
-      fetchDishes()
+      fetchJobs()
         .then((res) => {
           console.log(res);
-          this.AllitemList = res.list.map((cur) => {
+          this.AllitemList = res.data.map((cur) => {
             return {
-              imgSrc: "http://127.0.0.1:8000/" + cur.url,
-              cost: cur.cost,
-              seller: cur.seller,
-              ingredient: cur.ingredient,
-              name: cur.dishName,
-              canteen: cur.canteen,
-              id: cur.id,
-              introduction: cur.introduction,
-              sellerId:cur.sellerId,
+              id: cur.recruitmentId,
+              position: cur.position,
+              location: cur.location,
+              task: cur.task,
+              salary: cur.salary,
+              requirement: cur.requirement,
+              people: cur.people,
+              mail: cur.hr,
+              endTime: cur.endTime,
+              extra: cur.extra,
+              companyId : cur.companyId,
+              companyName:cur.name,
+              phone: cur.contact,
+              imgSrc: cur.icon,
+              intro: cur.introduction,
             };
           });
           this.getRealList();
@@ -432,7 +438,7 @@ export default {
   },
   mounted() {
     this.getList();
-    this.getCanteenList();
+    //this.getCanteenList();
   },
 };
 </script>
@@ -441,7 +447,7 @@ export default {
 @import "~@/styles/variables.scss";
 
 .market-container {
-  padding: 0px 12%;
+  padding: 0px 10%;
 
   .line-style {
     &:not(:first-child) {

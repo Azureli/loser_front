@@ -4,25 +4,22 @@
       <el-scrollbar>
         <el-row type="flex" align="center">
           <el-col :span="16" class="card-info-name">
-            {{ cardInfo.name }}
+            {{ cardInfo.position }}
           </el-col>
           <el-col :span="8" class="card-info-cost" style="text-align: right">
-            {{ cardInfo.cost }}
+            {{ cardInfo.salary }}K
           </el-col>
         </el-row>
         <el-row class="card-info-detail small-text">
-          {{ cardInfo.canteen }}&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.seller }}&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.seller }}
+          {{ cardInfo.location }}&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.people }}人&nbsp&nbsp|&nbsp&nbsp{{ cardInfo.requirement }}
         </el-row>
         <el-divider></el-divider>
         <el-row class="card-info-other">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-image :src="cardInfo.imgSrc"></el-image>
           </el-col>
-          <el-col :span="6">
-            公司名
-          </el-col>
-          <el-col :span="14" class="small-text">
-            公司名
+          <el-col :span="18" style="line-height:40px ">
+            {{ cardInfo.companyName }}
           </el-col>
         </el-row>
       </el-scrollbar>
@@ -46,16 +43,21 @@ export default {
       type: Object,
       default: () => {
         return {
-          imgSrc:
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-          cost: 0,
-          seller: "四川人家",
-          ingredient: "配料123配料123配料123配料123配料123配料123配料123",
-          name: "菜品名",
-          canteen: "七食堂",
-          id: 1,
-          introduction: "test",
-          sellerId:0,
+          id: 103,
+          position: "淘金者",
+          location: "撒哈拉沙漠",
+          task: "寻找金矿",
+          salary: 50,
+          requirement: "需要发现财富的眼力",
+          people: 2,
+          mail: "1232@xx.xx",
+          endTime: "2022-03-05T16:00:00.000+00:00",
+          extra: "",
+          companyId : 106,
+          companyName:"金洋有限公司",
+          phone: "123456",
+          imgSrc: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+          intro: "金洋有限公司在三年内就从名不见经传的小作坊，一举成为宇宙内Top500，这都归功于老板的远见和强力措施。",
         };
       },
     },
@@ -67,7 +69,7 @@ export default {
     viewDetail() {
       this.$router.push({
         path: "/detail",
-        query: { dishId: this.cardInfo.id },
+        query: {info: this.cardInfo },
       });
     },
     updateDish() {
@@ -157,10 +159,12 @@ export default {
       height: 40px;
       line-height: 35px;
       vertical-align: middle;
+
     }
 
     .small-text{
       color: #909399;
+      font-size: 0.8em;
     }
   }
 }

@@ -197,8 +197,8 @@ export default {
     return {
       canteenList: [],
       loginForm: {
-        username: "3220200930",
-        password: "nihaoya",
+        username: "小虎",
+        password: "123",
       },
       regForm: {
         regName: "",
