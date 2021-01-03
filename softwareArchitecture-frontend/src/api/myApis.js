@@ -33,21 +33,45 @@ export function viewmyInfo(data){
   })
 }
 
-export function viewDishDetail(data) {
+export function addResume(data) {
   return request({
-    url:'/viewDishDetail',
+    url:'user/resume?userId='+data.id+'&pic='+data.avatar+'&education='+data.education+
+    '&skill='+data.skill+'&experience='+data.experience,
     method:'post',
     data
   })
 }
 
-export function viewComment(data){
+export function submitResume(data){
   return request({
-    url:'/viewComment',
+    url:'/user/resumeRecruitment/'+data.resumeId+'/'+data.jobId,
     method:'post',
     data
   })
 }
+
+export function viewmypost(data){
+  return request({
+    url:'user/resumeRecruitment/'+data,
+    method:'get',
+    data
+  })
+}
+export function viewmycv(data){
+  return request({
+    url:'user/resume/'+data,
+    method:'get',
+    data
+  })
+}
+export function viewallpos(data){
+  return request({
+    url:'company/recruitment/'+data,
+    method:'get',
+    data
+  })
+}
+
 export function orderDish(data){
   return request({
     url:'/orderDish',

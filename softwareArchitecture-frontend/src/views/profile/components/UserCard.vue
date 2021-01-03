@@ -15,8 +15,8 @@
         <p>联系方式： {{userinfo.contact}}</p>
       </div>
       <div class="box-right" v-permission="['chef']">
-        <p>公司名称{{userinfo.name}}</p>
-        <p>公司介绍{{userinfo.introduction}}</p>
+        <p>{{companyinfo.name}}</p>
+        <p>联系方式{{companyinfo.contact}}</p>
       </div>
     </div>
 
@@ -28,7 +28,8 @@
           <span v-permission="['chef']">公司简介</span>
         </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">{{userinfo.introduction}}</div>
+          <div class="text-muted"  v-permission="['user']">{{userinfo.introduction}}</div>
+          <div class="text-muted"  v-permission="['chef']">{{companyinfo.introduction}}</div>
         </div>
       </div>
       <el-button @click="changeSelf" v-permission="['user','admin','chef']">修改信息</el-button>
@@ -53,9 +54,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          nname: "",
-          birth: "1999.9.9",
-          tel: "8888888",
+          birth: "",
           email: "",
           avatar: "",
           role: ""
@@ -67,6 +66,7 @@ export default {
     return {
       role: "",
       userinfo: {},
+      companyinfo:{},
       selfForm: {
         name: this.user.name,
         birth: this.user.birth,
@@ -79,18 +79,18 @@ export default {
     getpersoninfo() {
       viewmyInfo(this.id)
         .then(res => {
-          console.log(res);
           this.userinfo = res.data;
+           console.log( this.userinfo);
         })
         .catch(res => {
           console.log(res);
         });
     },
     getcompanyinfo() {
-      viewmyInfo(this.id)
+      viewMyCompany(this.id)
         .then(res => {
           console.log(res);
-          this.userinfo = res.data;
+          this.companyinfo = res.data;
         })
         .catch(res => {
           console.log(res);
@@ -133,7 +133,7 @@ export default {
     } else {
       this.getcompanyinfo();
     }
-    console.log(this.roles[1]);
+    // console.log(this.roles[1]);
   }
 };
 </script>

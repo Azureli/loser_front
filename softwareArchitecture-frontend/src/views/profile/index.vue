@@ -37,7 +37,7 @@ import Account from "./components/Account";
 import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
-import viewmyInfo from "@/api/myApis.js";
+import { viewmyInfo, viewmypost, viewallpos } from "@/api/myApis.js";
 
 export default {
   name: "Profile",
@@ -47,55 +47,8 @@ export default {
     return {
       user: {},
       activeTab: "activity",
-      itemList: [
-        {
-          posid: 1,
-          name: "马农",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "0",
-          textstate: "已拒绝"
-        },
-        {
-          posid: 1,
-          name: "123",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "1",
-          textstate: "审核中"
-        },
-        {
-          posid: 1,
-          name: "321",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "2",
-          textstate: "已通过"
-        }
-      ],
-      cvList: [
-        {
-          name: "运营1",
-          posid: "1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu: "小学毕业"
-        },
-        {
-          name: "运营2",
-          posid: "1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu: "小学毕业"
-        },
-        {
-          name: "运营3",
-          posid: "1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu: "小学毕业"
-        }
-      ]
+      itemList: [],
+      cvList: []
     };
   },
   computed: {
@@ -107,10 +60,13 @@ export default {
   mounted() {
     console.log(this.id);
     console.log(this.name);
+    if (this.roles[1][0] == "u") {
+      this.getpostlist();
+    } else {
+      this.getallpos();
+    }
   },
   methods: {
-    getList() {},
-    getcvList() {},
     getUser() {
       this.user = {
         name: this.name,
@@ -119,6 +75,28 @@ export default {
         avatar: this.avatar
       };
     },
+    getpostlist() {
+      viewmypost(this.id)
+        .then(res => {
+          console.log(res);
+          this.itemList = res.data;
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    }, //user查看自己的投递的简历
+    getallpos() {
+      //公司查看所有的岗位
+      viewallpos(this.id)
+        .then(res => {
+          console.log(res);
+          this.cvList = res.data;
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    },
+
     updateList() {
       console.log(1);
       this.getList();
@@ -126,9 +104,6 @@ export default {
     updatecvList() {
       console.log(1);
       this.getcvList();
-    },
-    mounted() {
-      this.getList();
     }
   }
 };

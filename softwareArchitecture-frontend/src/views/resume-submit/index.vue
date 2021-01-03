@@ -87,11 +87,13 @@
 
 <script>
   import { mapGetters } from "vuex";
+  import { getInfo} from "@/api/user";
+  import { addResume,submitResume} from "@/api/myApis";
     export default {
       name: "editResume",
 
       computed: {
-        ...mapGetters(["avatar"]),
+        ...mapGetters(["avatar","id"]),
       },
       data(){
         return{
@@ -109,15 +111,69 @@
       },
       methods:{
         submitResume(){
-          let fd = new FormData();
-          fd.append('name',name);
-          fd.append('birthday',birthday);
-          fd.append('intro',intro);
-          fd.append('educationText',educationText);
-          fd.append('workText',workText);
-          fd.append('skillText',skillText);
-          fd.append('otherText',otherText);
-        }
+          if(this.educationText===""||this.skillText===""||this.workText===""){
+            this.$message({
+              showClose: true,
+              message: '教育经历、工作经历和工作技能不能为空',
+              type: 'warning'
+            });
+            return;
+          }
+          addResume({
+            id:this.id,
+            education:this.educationText,
+            skill:this.skillText,
+            experience:this.workText,
+          }).then(res=>{
+            if(res.code===200){
+              let resumeId = res.data;
+              submitResume({
+                resumeId:resumeId,
+                jobId:this.$route.query.jobId
+              }).then(res=>{
+                if(res.code===200) {
+                  this.$message({
+                    showClose: true,
+                    message: '简历已提交',
+                    type: 'success'
+                  });
+                }
+                else{
+                  this.$message({
+                    showClose: true,
+                    message: '简历投递失败',
+                    type: 'error'
+                  });
+                }
+              }).catch(e=>{
+                this.$message.error(e)
+              })
+            }
+            else{
+              this.$message({
+                showClose: true,
+                message: '简历生成失败',
+                type: 'error'
+              });
+            }
+          }).catch(e=>{
+            this.$message.error(e)
+          })
+        },
+
+      },
+      mounted(){
+        getInfo({
+          id:this.id
+        }).then(res=>{
+          this.name = res.data.name;
+          this.imgUrl = res.data.avatar;
+          this.birthday =res.data.birth.split('T')[0];
+          this.phone = res.data.contract;
+          this.intro= res.data.introduction;
+        }).catch(e=>{
+          console.log(e)
+        })
       }
     }
 </script>

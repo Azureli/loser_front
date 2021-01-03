@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { confirmOrder } from "@/api/myApis.js";
+import {confirmOrder } from "@/api/myApis.js";
 import { mapGetters } from "vuex";
 import permission from "@/directive/permission/index.js";
 
@@ -79,10 +79,11 @@ export default {
     cancel(){
 
     },
+    
     showdetails(){
        this.$router.push({ path: "/detail" });
     }
-  }
+  },
 };
 </script>
 

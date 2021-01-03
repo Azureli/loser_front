@@ -18,8 +18,8 @@ export function loginUser(data) {
 
 export function getInfo(data) {
   return request({
-    url: '/getUserInfo',
-    method: 'post',
+    url: '/user/userInfo/'+data.id,
+    method: 'get',
     data
   })
 }
