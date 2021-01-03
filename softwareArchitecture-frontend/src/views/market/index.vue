@@ -455,8 +455,9 @@ export default {
   }
 
   .el-input-group__append{
-    background-color: #ffbc5a;
+    background-color: #ffbc00;
     color: #fff;
+    font-weight: bold;
   }
 }
 
