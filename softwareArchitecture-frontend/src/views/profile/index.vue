@@ -160,7 +160,7 @@ import Account from "./components/Account";
 import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
-import { viewmyInfo, viewmypost, viewallpos } from "@/api/myApis.js";
+import { viewmyInfo, viewmypost, viewallpos,viewmycv } from "@/api/myApis.js";
 import { addRecruitment,updateRecruitment,getcvList} from "@/api/myApis";
 
 export default {
@@ -176,54 +176,8 @@ export default {
       activeTab: "activity",
       itemList: [],
       cvList: [],
-      itemList: [
-        {
-          posid: 1,
-          name: "马农",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "0",
-          textstate: "已拒绝"
-        },
-        {
-          posid: 1,
-          name: "123",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "1",
-          textstate: "审核中"
-        },
-        {
-          posid: 1,
-          name: "321",
-          time: "2020.1.1",
-          salary: "12K",
-          state: "2",
-          textstate: "已通过"
-        }
-      ],
+      itemList: [      ],
       cvList:[
-        {
-          name: "运营1",
-          posid:"1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu:"小学毕业",
-        },
-        {
-          name: "运营2",
-          posid:"1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu:"小学毕业",
-        },
-        {
-          name: "运营3",
-          posid:"1",
-          commend: "能上刀山下火海",
-          salary: "12K",
-          edu:"小学毕业",
-        }
       ],
       addForm:{
         companyId:'',
@@ -415,7 +369,7 @@ export default {
 
     updateList() {
       console.log(1);
-      this.getList();
+      this.getpostlist();
     },
     updatecvList() {
       console.log(1);
