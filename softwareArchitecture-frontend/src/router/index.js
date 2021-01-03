@@ -146,15 +146,15 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/order',
+    path: '/viewResume',
     component: Layout,
     meta: { roles: ['admin','chef'] },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/order/index'),
+        component: () => import('@/views/resume-view/index'),
         name: 'Order',
-        meta: { title: '我的接单', icon: 'order', affix: true }
+        meta: { title: '查看简历', icon: 'order', affix: true }
       }
     ]
   },

@@ -25,7 +25,6 @@
       <el-card>
         <el-image :src="src"></el-image>
         <p class="title">{{company}}</p>
-        <h3>公司简介</h3>
         <el-divider></el-divider>
         <h5>岗位数量</h5>
         <p>{{staffnum}}</p>

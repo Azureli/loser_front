@@ -1,5 +1,5 @@
 <template>
-  <div class="logo-wrapper">
+  <div class="logo-wrapper" @click="goIndex">
     <el-row type="flex" align="middle">
     <img src="./../../../icons/BITlogo2.png" fit="contain"/>
     <h2>LOSER直聘</h2>
@@ -15,6 +15,11 @@ export default {
       title: 'Vue Element Admin',
       logo: '../../../assets/BITlogo2.png'
     }
+  },
+  methods:{
+    goIndex(){
+      this.$router.push("/market")
+    }
   }
 }
 </script>
@@ -28,6 +33,7 @@ export default {
   display: inline-block;
   background-color: $menuBg;
   padding-left: 10px;
+  cursor: pointer;
 
   .el-row{
     height:56px;
