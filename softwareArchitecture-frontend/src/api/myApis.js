@@ -90,10 +90,12 @@ export function addRecruitment(data) {
   })
 }
 
-export function updateDish(data) {
+export function updateRecruitment(data) {
   return request ({
-    url: '/editDish',
-    method: "post",
+    url: 'company/recruitment_info?recruitmentId='+data.id+'&position='+data.position+'&location='+data.location+
+    '&task='+data.task+'&salary='+data.salary+'&requirement='+data.requirement+'&people='+data.people+
+    '&hr='+data.hr+ '&endTime='+data.endTime,
+    method: "put",
     data
   })
 }
