@@ -195,3 +195,24 @@ export function changeUserInfo(data) {
     data
   })
 }
+
+export function getPeopleList(id) {
+  return request ({
+    url: '/company/resume/' + id,
+    method: "get"
+  })
+}
+
+export function rejectResume(data) {
+  return request ({
+    url: '/company/resumeRecruitment?id=' + data.id+ '&status=' + data.status +"&message="+data.message,
+    method: "put"
+  })
+}
+
+export function acceptResume(data) {
+  return request ({
+    url: '/company/resumeRecruitment?id=' + data.id+ '&status=' + data.status +"&message="+data.message,
+    method: "put"
+  })
+}

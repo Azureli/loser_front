@@ -180,7 +180,7 @@ import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
 import { viewmyInfo, viewmypost, viewallpos } from "@/api/myApis.js";
-import { addRecruitment,updateRecruitment,updateCompanyInfo} from "@/api/myApis";
+import { addRecruitment,updateRecruitment,updateCompanyInfo,getcvList} from "@/api/myApis";
 
 export default {
   name: "Profile",
@@ -423,7 +423,13 @@ export default {
         });
     },
     getList() {},
-    getcvList() {},
+    // getcvList() {
+    //   getcvList(id).then(res => {
+    //     console.log(res)
+    //   }).catch(res => {
+    //     console.log(res)
+    //   })
+    // },
     getUser() {
       this.user = {
         name: this.name,
@@ -447,7 +453,18 @@ export default {
       viewallpos(this.id)
         .then(res => {
           console.log(res);
-          this.cvList = res.data;
+        //   {
+        //   name: "运营1",
+        //   posid:"1",
+        //   commend: "能上刀山下火海",
+        //   salary: "12K",
+        //   edu:"小学毕业",
+        // },
+          this.cvList = res.data.map(cur => {
+            cur.posid = cur.recruitmentId
+            cur.name = cur.position
+            return cur
+          });
         })
         .catch(res => {
           console.log(res);
