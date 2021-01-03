@@ -15,8 +15,8 @@
       </el-col>
     </div>
 
-    <div >
-      <el-col :span="14" :offset="1" v-permission="['chef']" >
+    <div>
+      <el-col :span="14" :offset="1" v-permission="['chef']">
         <cv-toget
           v-for="(i, ind) in cvList"
           :key="ind"
@@ -37,11 +37,12 @@ import Account from "./components/Account";
 import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
+import viewmyInfo from "@/api/myApis.js";
 
 export default {
   name: "Profile",
   directives: { permission },
-  components: { UserCard, Activity, Timeline, Account, PosToget ,CvToget},
+  components: { UserCard, Activity, Timeline, Account, PosToget, CvToget },
   data() {
     return {
       user: {},
@@ -72,36 +73,40 @@ export default {
           textstate: "已通过"
         }
       ],
-      cvList:[
+      cvList: [
         {
           name: "运营1",
-          posid:"1",
+          posid: "1",
           commend: "能上刀山下火海",
           salary: "12K",
-          edu:"小学毕业",
+          edu: "小学毕业"
         },
         {
           name: "运营2",
-          posid:"1",
+          posid: "1",
           commend: "能上刀山下火海",
           salary: "12K",
-          edu:"小学毕业",
+          edu: "小学毕业"
         },
         {
           name: "运营3",
-          posid:"1",
+          posid: "1",
           commend: "能上刀山下火海",
           salary: "12K",
-          edu:"小学毕业",
+          edu: "小学毕业"
         }
       ]
     };
   },
   computed: {
-    ...mapGetters(["name", "avatar", "roles"])
+    ...mapGetters(["id", "name", "avatar", "roles"])
   },
   created() {
     this.getUser();
+  },
+  mounted() {
+    console.log(this.id);
+    console.log(this.name);
   },
   methods: {
     getList() {},
@@ -118,7 +123,7 @@ export default {
       console.log(1);
       this.getList();
     },
-      updatecvList() {
+    updatecvList() {
       console.log(1);
       this.getcvList();
     },

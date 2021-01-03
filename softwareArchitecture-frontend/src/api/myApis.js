@@ -17,6 +17,22 @@ export function viewJob(data){
   })
 }
 
+export function viewMyCompany(data){
+  return request({
+    url:'company/companyInfo/'+data,
+    method:'get',
+    data
+  })
+}
+
+export function viewmyInfo(data){
+  return request({
+    url:'user/userInfo/'+data,
+    method:'get',
+    data
+  })
+}
+
 export function viewDishDetail(data) {
   return request({
     url:'/viewDishDetail',
