@@ -9,6 +9,8 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
+  birth:'',
+  contract:'',
   id: '',
   canteen: ''
 }
@@ -25,6 +27,12 @@ const mutations = {
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
+  },
+  SET_BIRTH: (state, birth) => {
+    state.birth = birth
+  },
+  SET_CONTRACT: (state, contract) => {
+    state.contract = contract
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -53,6 +61,9 @@ const actions = {
           commit('SET_ROLES', ['admin', 'user'])
           commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
           commit('SET_TOKEN', 'token')
+          commit('SET_BIRTH', response.data.birth)
+          commit('SET_CONTRACT', response.data.contract)
+          commit('SET_INTRODUCTION', response.data.introduction)
           setToken('token')
           resolve()
         }).catch(error => {
@@ -76,7 +87,7 @@ const actions = {
         })
       })
     }
-    
+
   },
 
   // get user info

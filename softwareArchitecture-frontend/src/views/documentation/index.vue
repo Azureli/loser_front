@@ -83,7 +83,7 @@ export default {
         });
     },
     submitcv() {
-      this.$router.push({ path: "/resume" });
+      this.$router.push({ path: "/resume" ,query: {jobId: this.info.id },});
     },
     mounted() {
       this.dishid = this.$route.query.dishId;

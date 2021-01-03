@@ -9,17 +9,18 @@ export function fetchJobs(data) {
     data
   })
 }
-export function viewDishDetail(data) {
+export function addResume(data) {
   return request({
-    url:'/viewDishDetail',
+    url:'user/resume?userId='+data.id+'&pic='+data.avatar+'&education='+data.education+
+    '&skill='+data.skill+'&experience='+data.experience,
     method:'post',
     data
   })
 }
 
-export function viewComment(data){
+export function submitResume(data){
   return request({
-    url:'/viewComment',
+    url:'/user/resumeRecruitment/'+data.resumeId+'/'+data.jobId,
     method:'post',
     data
   })
