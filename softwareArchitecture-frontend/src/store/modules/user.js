@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { loginUser,loginChef, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import viewDishDetail from './app.js'
@@ -40,24 +40,43 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password,role } = userInfo
     // let fd = new FormData();
     // fd.append('username', username);
     // fd.append('password', password)
-    return new Promise((resolve, reject) => {
-      login({ username: username, password: password }).then(response => {
-        console.log(response)
-        commit('SET_ID', response.data.userId)
-        commit('SET_NAME', response.data.name)
-        commit('SET_ROLES', ['admin', 'chef'])
-        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
-        commit('SET_TOKEN', 'token')
-        setToken('token')
-        resolve()
-      }).catch(error => {
-        reject(error)
+    if(role === 1){//求职者
+      return new Promise((resolve, reject) => {
+        loginUser({ username: username, password: password }).then(response => {
+          console.log(response)
+          commit('SET_ID', response.data.userId)
+          commit('SET_NAME', response.data.name)
+          commit('SET_ROLES', ['admin', 'user'])
+          commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+          commit('SET_TOKEN', 'token')
+          setToken('token')
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
-    })
+    }
+    else{//公司
+      return new Promise((resolve, reject) => {
+        loginChef({ username: username, password: password }).then(response => {
+          console.log(response)
+          commit('SET_ID', response.data.userId)
+          commit('SET_NAME', response.data.name)
+          commit('SET_ROLES', ['admin', 'chef'])
+          commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+          commit('SET_TOKEN', 'token')
+          setToken('token')
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    }
+    
   },
 
   // get user info

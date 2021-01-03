@@ -58,6 +58,19 @@
               </el-form-item>
             </el-tooltip>
 
+            <el-form-item>
+              <span class="svg-container">
+                <i class="el-icon-menu" />
+              </span>
+              <el-radio-group
+                v-model="loginForm.role"
+                style="margin-left: 10px; heihgt: 49px"
+              >
+                <el-radio :label="1">求职者</el-radio>
+                <el-radio :label="2">公司</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
             <el-button
               :loading="loading"
               class="dark-red-btn"
@@ -130,31 +143,11 @@
               </span>
               <el-radio-group
                 v-model="regForm.role"
-                @change="changeRole"
                 style="margin-left: 10px; heihgt: 49px"
               >
-                <el-radio :label="1">食堂商户</el-radio>
-                <el-radio :label="2">学生</el-radio>
+                <el-radio :label="1">求职者</el-radio>
+                <el-radio :label="2">公司</el-radio>
               </el-radio-group>
-            </el-form-item>
-            <el-form-item v-if="showCanteenList">
-              <span class="svg-container">
-                <i class="el-icon-s-home" />
-              </span>
-              <el-select
-                v-model="regForm.canteen"
-                placeholder="Canteen"
-                size="mini"
-                style="width: calc(100% - 30px)"
-              >
-                <el-option
-                  v-for="item in canteenList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
             </el-form-item>
 
             <el-button
@@ -174,7 +167,7 @@
 <script>
 import { validUsername } from "@/utils/validate";
 import SocialSign from "./components/SocialSignin";
-import { fetchCanteenList, register } from "@/api/myApis";
+import { fetchCanteenList, registerUser, registerChef } from "@/api/myApis";
 
 export default {
   name: "Login",
@@ -199,6 +192,7 @@ export default {
       loginForm: {
         username: "3220200930",
         password: "nihaoya",
+        role: "",
       },
       regForm: {
         regName: "",
@@ -245,53 +239,55 @@ export default {
     } else if (this.loginForm.password === "") {
       this.$refs.password.focus();
     }
-    this.getCanteenList();
+    // this.getCanteenList();
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
     handleRegister() {
-      console.log(this.regForm)
-      let fd = new FormData()
-      fd.append('username', this.regForm.regName);
-      fd.append('password', this.regForm.regPassword);
-      fd.append('role', this.regForm.role)
-      if(this.regForm.role === 1) {
-        fd.append('belongId', this.regForm.canteen)
-      }
-
-      register(fd).then(res => {
-        console.log(res)
-        if(res.error_num === 0) {
-          this.$message({
-          message: '注册成功',
-          type: 'success'
-        });
-        }
-      }).catch(res => {
-        console.log(res)
-      })
-    },
-
-    getCanteenList() {
-      fetchCanteenList()
-        .then((res) => {
-          console.log(res);
-          this.canteenList = res.list.map((cur) => {
-            return {
-              value: cur.id,
-              label: cur.name,
-            };
-          });
+      console.log(this.regForm);
+      let fd = new FormData();
+      fd.append("username", this.regForm.regName);
+      fd.append("password", this.regForm.regPassword);
+      fd.append("role", this.regForm.role);
+      if (this.regForm.role === 1) {
+        //求职者
+        registerUser({
+          name: this.regForm.regName,
+          pwd: this.regForm.regPassword,
         })
-        .catch((res) => {
-          console.log(res);
-        });
-    },
-    changeRole(val) {
-      if (val === 1) this.showCanteenList = true;
-      else this.showCanteenList = false;
+          .then((res) => {
+            console.log(res);
+            if (res.data === 1) {
+              this.$message({
+                message: "注册成功",
+                type: "success",
+              });
+            }
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      } else {
+        //公司
+        registerChef({
+          name: this.regForm.regName,
+          pwd: this.regForm.regPassword,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.data === 1) {
+              this.$message({
+                message: "注册成功",
+                type: "success",
+              });
+            }
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
     },
     handleClick(tab, event) {
       console.log(tab, event);
@@ -311,6 +307,7 @@ export default {
       });
     },
     handleLogin() {
+      console.log(this.loginForm);
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
@@ -364,8 +361,8 @@ $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
 @import "~@/styles/variables.scss";
-.login-container .el-input input{
-  color: #510F0F !important;
+.login-container .el-input input {
+  color: #510f0f !important;
 }
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -375,7 +372,7 @@ $cursor: #fff;
 
 .el-radio__input.is-checked .el-radio__inner {
   border-color: $darkRedHover;
-  background:$darkRedHover;
+  background: $darkRedHover;
 }
 
 .el-radio__input.is-checked + .el-radio__label {
@@ -383,7 +380,7 @@ $cursor: #fff;
 }
 
 .el-tabs__active-bar {
-  background-color: #510F0F;
+  background-color: #510f0f;
   height: 3px;
   width: 50% !important;
 }
@@ -394,12 +391,12 @@ $cursor: #fff;
   color: #815050;
 }
 .el-tabs__item.is-active {
-  color: #510F0F;
+  color: #510f0f;
 }
 .el-button--primary {
-  color: #FFFFFF;
-  background-color: #510F0F;
-  border-color: #510F0F;
+  color: #ffffff;
+  background-color: #510f0f;
+  border-color: #510f0f;
 }
 .el-tabs__nav {
   width: 100%;
@@ -455,14 +452,14 @@ $cursor: #fff;
 
 <style lang="scss" scoped>
 $bg: #ffffff;
-$dark_gray: #510F0F;
+$dark_gray: #510f0f;
 $light_gray: #eee;
 
 .login-container {
   background-color: $bg;
   overflow: hidden;
   .el-tabs__item.is-active {
-    color: #510F0F;
+    color: #510f0f;
   }
 
   .login-form {
@@ -499,7 +496,7 @@ $light_gray: #eee;
 
     .title {
       font-size: 26px;
-      color: #510F0F;
+      color: #510f0f;
       margin: 60px auto auto auto;
       text-align: center;
       font-weight: bold;
