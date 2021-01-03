@@ -1,5 +1,5 @@
 <template>
-  <el-row class="dish-container">
+  <el-row class="cv-container">
     <div class="grey-head">
       <h2>
         {{position}}
@@ -96,7 +96,7 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.dish-container {
+.cv-container {
   text-align: left;
   margin: 0% 0% 0% 0%;
   padding: 0;

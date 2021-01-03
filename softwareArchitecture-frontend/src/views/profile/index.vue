@@ -16,7 +16,7 @@
     </div>
 
     <div >
-      <el-col :span="14" :offset="1" >
+      <el-col :span="14" :offset="1" v-permission="['chef']" >
         <cv-toget
           v-for="(i, ind) in cvList"
           :key="ind"

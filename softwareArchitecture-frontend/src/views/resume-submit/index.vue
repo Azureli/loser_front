@@ -156,7 +156,7 @@
   }
   .box{
     display: inline-block;
-    background-color: #ffbc5a;
+    background-color: #ffbc00;
     width: 10px;
     height: 40px;
     margin-right: 10px;
@@ -194,7 +194,7 @@
   }
 
   .el-button{
-    background-color: #ffbc5a;
+    background-color: #ffbc00;
     color: #ffffff;
     width: 150px;
     height: 45px;
