@@ -15,11 +15,14 @@
         </el-row>
         <el-divider></el-divider>
         <el-row class="card-info-other">
-          <el-col :span="6">
+          <el-col :span="5">
             <el-image :src="cardInfo.imgSrc"></el-image>
           </el-col>
-          <el-col :span="18" style="line-height:40px ">
+          <el-col :span="10" style="line-height:40px ">
             {{ cardInfo.companyName }}
+          </el-col>
+          <el-col :span="9" class="small-text" style="line-height:40px ">
+            <i class="el-icon-phone-outline" />{{cardInfo.phone}}
           </el-col>
         </el-row>
       </el-scrollbar>

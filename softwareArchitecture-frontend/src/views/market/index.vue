@@ -179,13 +179,23 @@ export default {
         jobType:"",
       },
       jobOptions:{
-        placeholder: "职位类型",
+        placeholder: "城市",
         items: [
-          { label: "近一个月", value: 1 },
-          { label: "近三个月", value: 3 },
-          { label: "近六个月", value: 6 },
-          { label: "近一年", value: 12 },
-          { label: "全部", value: -1 },
+          { label: "不限", value: -1 },
+          { label: "北京", value: "北京" },
+          { label: "上海", value: "上海" },
+          { label: "广州", value: "广州" },
+          { label: "深圳", value: "深圳" },
+          { label: "杭州", value: "杭州" },
+          { label: "天津", value: "天津" },
+          { label: "西安", value: "西安" },
+          { label: "苏州", value: "苏州" },
+          { label: "武汉", value: "武汉" },
+          { label: "厦门", value: "厦门" },
+          { label: "长沙", value: "长沙" },
+          { label: "成都", value: "成都" },
+          { label: "郑州", value: "郑州" },
+          { label: "重庆", value: "重庆" },
         ],
       },
     };
@@ -324,25 +334,34 @@ export default {
       if (item.length !== 0) this.itemLineList.push(item);
     },
     searchJob(){
-      if (this.searchWord === "") {
+      if (this.selectionForm.jobValue === "") {
         this.getList();
         return;
       }
-      let fd = new FormData();
-      fd.append("keyword", this.searchWord);
-      searchDish(fd)
+      if(this.selectionForm.jobType===-1)
+        this.selectionForm.jobType='';
+      fetchJobs({
+        position:this.selectionForm.jobValue,
+        location:this.selectionForm.jobType,
+      })
         .then((res) => {
-          this.AllitemList = res.list.map((cur) => {
+          this.AllitemList = res.data.map((cur) => {
             return {
-              imgSrc: "http://127.0.0.1:8000/" + cur.url,
-              cost: cur.cost,
-              seller: cur.seller,
-              ingredient: cur.ingredient,
-              name: cur.dishName,
-              canteen: cur.canteen,
-              id: cur.id,
-              introduction: cur.introduction,
-              sellerId:cur.sellerId,
+              id: cur.recruitmentId,
+              position: cur.position,
+              location: cur.location,
+              task: cur.task,
+              salary: cur.salary,
+              requirement: cur.requirement,
+              people: cur.people,
+              mail: cur.hr,
+              endTime: cur.endTime,
+              extra: cur.extra,
+              companyId : cur.companyId,
+              companyName:cur.name,
+              phone: cur.contact,
+              imgSrc: cur.icon,
+              intro: cur.introduction,
             };
           });
           this.getRealList();
@@ -353,7 +372,10 @@ export default {
     },
     getList() {
       this.AllitemList = [];
-      fetchJobs()
+      fetchJobs({
+        position:'',
+        location:''
+      })
         .then((res) => {
           console.log(res);
           this.AllitemList = res.data.map((cur) => {
