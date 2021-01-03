@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function loginChef(data) {
+  return request({
+    url: '/company/login?name='+data.username+'&pwd='+data.password,
+    method: 'get',
+    data
+  })
+}
+
+export function loginUser(data) {
   return request({
     url: '/user/login?name='+data.username+'&pwd='+data.password,
     method: 'get',

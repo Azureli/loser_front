@@ -103,9 +103,17 @@ export function fetchCanteenList() {
   })
 }
 
-export function register(data) {
+export function registerUser(data) {
   return request ({
-    url: '/register',
+    url: '/user/register?name='+data.name+"&pwd="+data.pwd,
+    method: "post",
+    data
+  })
+}
+
+export function registerChef(data) {
+  return request ({
+    url: '/company/register?name='+data.name+"&pwd="+data.pwd,
     method: "post",
     data
   })
