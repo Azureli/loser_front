@@ -9,6 +9,14 @@ export function fetchJobs(data) {
     data
   })
 }
+export function viewJob(data){
+  return request({
+    url:'company/recruitment_info/',
+    method:'get',
+    data
+  })
+}
+
 export function viewDishDetail(data) {
   return request({
     url:'/viewDishDetail',

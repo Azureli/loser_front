@@ -2,34 +2,45 @@
   <el-row class="cv-container">
     <div class="grey-head">
       <h2>
-        {{position}}
-        <span class="dishprice">薪资 {{salary}}</span>
+        {{info.position}}
+        <span class="dishprice">薪资 {{info.salary}}/月</span>
         <el-button @click="submitcv" v-permission="['user']">投递简历</el-button>
       </h2>
-      <h3>工作地点：{{workplace}}·招聘人数：{{Num}}·时间：{{worktime}}</h3>
+      <h3>
+        工作地点：{{info.location}}
+        <el-divider direction="vertical"></el-divider>
+        招聘人数：{{info.people}}
+      </h3>
     </div>
-    <el-col :span="10" :offset="2">
+    <el-col :span="11" :offset="1">
       <div>
         <h2>
           <i class="el-icon-caret-right"></i>工作内容
         </h2>
-        <p>{{context}}</p>
+        <p>{{info.task}}</p>
         <h2>
           <i class="el-icon-caret-right"></i>岗位要求
         </h2>
-        <p>{{pos_discrip}}</p>
+        <p>{{info.requirement}}</p>
+        <h2>
+          <i class="el-icon-caret-right"></i>截止时间
+        </h2>
+        <p>{{info.endTime}}</p>
+        <h2>
+          <i class="el-icon-caret-right"></i>联系方式
+        </h2>
+        <p>Email:{{info.mail}}</p>
+        <p>TEL:{{info.phone}}</p>
         <el-link href="#/market" :underline="false" class="link">返回首页</el-link>
       </div>
     </el-col>
     <el-col :span="8" :offset="2">
       <el-card>
-        <el-image :src="src"></el-image>
-        <p class="title">{{company}}</p>
+        <el-image :src="info.imgSrc"></el-image>
+        <p class="title">{{info.companyName}}</p>
         <el-divider></el-divider>
-        <h5>岗位数量</h5>
-        <p>{{staffnum}}</p>
         <h5>公司简介</h5>
-        <p>{{intro}}</p>
+        <p>{{info.intro}}</p>
       </el-card>
     </el-col>
   </el-row>
@@ -50,20 +61,28 @@ export default {
   },
   data() {
     return {
-      position: "顶级码农",
-      salary: "15k-20k",
-      workplace: "宿舍床上",
-      Num: "一个亿",
-      worktime: "996",
-      context:
-        "工作内容工作内容工作内容工作内容工作内容工作内容工作内容工作内容工作内容工作内容工作内容工作内容",
-      pos_discrip:
-        "睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉睡大觉",
-      company: "Microsoft",
-      staffnum: "1000",
-      intro: "每天九九六 快乐打工人",
-      src: "F:\\图片\\61.bmp"
+      info: {},
+      companyId: "",
+      companyName: "",
+      Cvid: "",
+      imgSrc: "",
+      intro: "",
+      location: "",
+      mail: "",
+      people: "",
+      phone: "",
+      position: "",
+      requirement: "",
+      salary: "",
+      task: ""
     };
+  },
+  mounted() {
+    console.log(this.$route.query.info);
+    // this.info=this.$route.query.info;
+    this.info = JSON.parse(JSON.stringify(this.$route.query.info));
+
+    console.log(this.info.imgSrc);
   },
   methods: {
     getInfo() {
@@ -84,11 +103,6 @@ export default {
     },
     submitcv() {
       this.$router.push({ path: "/resume" });
-    },
-    mounted() {
-      this.dishid = this.$route.query.dishId;
-      this.getInfo();
-      console.log(this.$route.query);
     }
   }
 };
@@ -140,6 +154,8 @@ export default {
   }
   .dishprice {
     color: red;
+    font-size:20px;
+    margin-left: 2%;
   }
 
   .el-image {
