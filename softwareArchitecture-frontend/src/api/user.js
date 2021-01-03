@@ -2,8 +2,8 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/loginCheck',
-    method: 'post',
+    url: '/user/login?name='+data.username+'&pwd='+data.password,
+    method: 'get',
     data
   })
 }

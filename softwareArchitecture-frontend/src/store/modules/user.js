@@ -9,8 +9,8 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
-  id:'',
-  canteen:''
+  id: '',
+  canteen: ''
 }
 
 const mutations = {
@@ -41,13 +41,16 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
-    let fd = new FormData();
-    fd.append('username', username);
-    fd.append('password', password)
+    // let fd = new FormData();
+    // fd.append('username', username);
+    // fd.append('password', password)
     return new Promise((resolve, reject) => {
-      login(fd).then(response => {
-
-        commit('SET_ID', response.id)
+      login({ username: username, password: password }).then(response => {
+        console.log(response)
+        commit('SET_ID', response.data.userId)
+        commit('SET_NAME', response.data.name)
+        commit('SET_ROLES', ['admin', 'chef'])
+        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
         commit('SET_TOKEN', 'token')
         setToken('token')
         resolve()
@@ -64,14 +67,14 @@ const actions = {
       fd.append('id', state.id)
       getInfo(fd).then(response => {
         console.log(response)
-        const { roles, username} = response
+        const { roles, username } = response
 
         // roles must be a non-empty array
         if (!roles) {
           reject('getInfo: roles must be a non-null array!')
         }
-        if(response.roles[0] === 'chef')
-        commit('SET_CANTEEN', response.canteen)
+        if (response.roles[0] === 'chef')
+          commit('SET_CANTEEN', response.canteen)
 
         commit('SET_ROLES', roles)
         commit('SET_NAME', username)
@@ -132,16 +135,16 @@ const actions = {
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       // logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resetRouter()
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      removeToken()
+      resetRouter()
 
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        dispatch('tagsView/delAllViews', null, { root: true })
+      // reset visited views and cached views
+      // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
+      dispatch('tagsView/delAllViews', null, { root: true })
 
-        resolve()
+      resolve()
       // }).catch(error => {
       //   reject(error)
       // })
