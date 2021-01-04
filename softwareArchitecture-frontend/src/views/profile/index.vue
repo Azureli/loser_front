@@ -11,7 +11,7 @@
       </el-col>
 
       <el-col :span="6" :xs="24" :offset="1">
-        <user-card :user="user" @addJob="changeAddDialog" />
+        <user-card :user="user" @addJob="changeAddDialog" @changeInfo="changeCompanyDialog" />
       </el-col>
     </div>
 
@@ -318,6 +318,10 @@ export default {
     changeEditDialog(data){
       this.updateForm= data;
       this.showUpdateDialog = true;
+    },
+    changeCompanyDialog(data){
+      this.companyForm= data;
+      this.showCompanyDialog = true;
     },
     addJobComfirm(){
       console.log(this.id)

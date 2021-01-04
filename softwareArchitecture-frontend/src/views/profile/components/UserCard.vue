@@ -125,6 +125,10 @@ export default {
       this.$emit('addJob', true)
     },
     changeSelf() {
+      if (this.role[0] == "c"){
+        this.$emit('changeInfo', this.companyinfo);
+        return;
+      }
       console.log(this.selfForm);
       let fd = new FormData();
       fd.append("username", this.selfForm.name);
