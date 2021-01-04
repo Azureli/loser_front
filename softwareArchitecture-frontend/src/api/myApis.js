@@ -232,3 +232,11 @@ export function acceptResume(data) {
     method: "put"
   })
 }
+
+export function updateUserInfo(data) {
+  return request ({
+    url: 'user/userInfo?userId='+data.id+'&contact='+data.contact+
+    '&introduction='+data.introduction+'&birth='+data.birth,
+    method: "put"
+  })
+}

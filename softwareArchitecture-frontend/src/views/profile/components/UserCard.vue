@@ -11,7 +11,7 @@
       </div>
       <div class="box-right" v-permission="['user']">
         <p>姓名：{{userinfo.name}}</p>
-        <p>生日：{{userinfo.birth}}</p>
+        <p>生日：{{userinfo.birth.substring(0,10)}}</p>
         <p>联系方式： {{userinfo.contact}}</p>
       </div>
       <div class="box-right" v-permission="['chef']">
@@ -129,33 +129,39 @@ export default {
         this.$emit('changeInfo', this.companyinfo);
         return;
       }
-      console.log(this.selfForm);
-      let fd = new FormData();
-      fd.append("username", this.selfForm.name);
-      fd.append("canteenId", this.selfForm.canteen);
-      fd.append("userId", this.id);
+      else if(this.role[0] === 'u') {
+        // console.log(this.userinfo)
+        this.$emit('changeInfoUser', this.userinfo)
+        return ;
+      }
+      console.log(this.role)
+      // console.log(this.selfForm);
+      // let fd = new FormData();
+      // fd.append("username", this.selfForm.name);
+      // fd.append("canteenId", this.selfForm.canteen);
+      // fd.append("userId", this.id);
 
-      changeUserInfo(fd)
-        .then(res => {
-          console.log(res);
-          let name = "";
-          for (let i of this.canteenOptions) {
-            if (i.value === this.selfForm.canteen) {
-              name = i.label;
-              break;
-            }
-          }
-          this.$store.commit("user/SET_CANTEEN", name);
-          this.$store.commit("user/SET_NAME", this.selfForm.name);
-          this.$message({
-            message: "修改成功",
-            type: "success"
-          });
-          console.log(this.name);
-        })
-        .catch(res => {
-          console.log(res);
-        });
+      // changeUserInfo(fd)
+      //   .then(res => {
+      //     console.log(res);
+      //     let name = "";
+      //     for (let i of this.canteenOptions) {
+      //       if (i.value === this.selfForm.canteen) {
+      //         name = i.label;
+      //         break;
+      //       }
+      //     }
+      //     this.$store.commit("user/SET_CANTEEN", name);
+      //     this.$store.commit("user/SET_NAME", this.selfForm.name);
+      //     this.$message({
+      //       message: "修改成功",
+      //       type: "success"
+      //     });
+      //     console.log(this.name);
+      //   })
+      //   .catch(res => {
+      //     console.log(res);
+      //   });
     }
   },
   mounted() {

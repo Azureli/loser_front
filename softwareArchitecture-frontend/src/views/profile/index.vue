@@ -11,7 +11,12 @@
       </el-col>
 
       <el-col :span="6" :xs="24" :offset="1">
-        <user-card :user="user" @addJob="changeAddDialog" @changeInfo="changeCompanyDialog" />
+        <user-card
+          :user="user"
+          @addJob="changeAddDialog"
+          @changeInfo="changeCompanyDialog"
+          @changeInfoUser="changeUserDialog"
+        />
       </el-col>
     </div>
 
@@ -41,7 +46,8 @@
                 type="date"
                 placeholder="选择日期"
                 format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd">
+                value-format="yyyy-MM-dd"
+              >
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -65,13 +71,21 @@
           <el-col :span="11">
             <el-form-item label="薪酬（千）">
               <!--<el-input v-model="addForm.salary"></el-input>-->
-              <el-input-number v-model="addForm.salary" :precision="2" :step="1"></el-input-number>
+              <el-input-number
+                v-model="addForm.salary"
+                :precision="2"
+                :step="1"
+              ></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="11" :offset="2">
             <el-form-item label="招聘人数">
               <!--<el-input v-model="addForm.people"></el-input>-->
-              <el-input-number v-model="addForm.people" :step="1" step-strictly></el-input-number>
+              <el-input-number
+                v-model="addForm.people"
+                :step="1"
+                step-strictly
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -83,7 +97,7 @@
         </el-form-item>
         <el-form-item>
           <el-button class="dark-red-btn" @click="addJobComfirm"
-          >确定</el-button
+            >确定</el-button
           >
         </el-form-item>
       </el-form>
@@ -102,7 +116,8 @@
                 type="date"
                 placeholder="选择日期"
                 format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd">
+                value-format="yyyy-MM-dd"
+              >
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -126,13 +141,21 @@
           <el-col :span="11">
             <el-form-item label="薪酬（千）">
               <!--<el-input v-model="addForm.salary"></el-input>-->
-              <el-input-number v-model="updateForm.salary" :precision="2" :step="1"></el-input-number>
+              <el-input-number
+                v-model="updateForm.salary"
+                :precision="2"
+                :step="1"
+              ></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="11" :offset="2">
             <el-form-item label="招聘人数">
               <!--<el-input v-model="addForm.people"></el-input>-->
-              <el-input-number v-model="updateForm.people" :step="1" step-strictly></el-input-number>
+              <el-input-number
+                v-model="updateForm.people"
+                :step="1"
+                step-strictly
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -144,12 +167,16 @@
         </el-form-item>
         <el-form-item>
           <el-button class="dark-red-btn" @click="updateJobComfirm"
-          >确定</el-button
+            >确定</el-button
           >
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog title="编辑公司信息" :visible.sync="showCompanyDialog" width="30%">
+    <el-dialog
+      title="编辑公司信息"
+      :visible.sync="showCompanyDialog"
+      width="30%"
+    >
       <el-form :model="companyForm" label-width="80px">
         <el-form-item label="公司标志">
           <el-input v-model="companyForm.icon"></el-input>
@@ -162,11 +189,39 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="showCompanyDialog = false">取 消</el-button>
-          <el-button type="primary" @click="updateCompanyComfirm">确 定</el-button>
-        </span>
+        <el-button @click="showCompanyDialog = false">取 消</el-button>
+        <el-button type="primary" @click="updateCompanyComfirm"
+          >确 定</el-button
+        >
+      </span>
     </el-dialog>
-
+    <el-dialog title="编辑个人信息" :visible.sync="showUserDialog" width="30%">
+      <el-form :model="userForm" label-width="80px">
+        <el-form-item label="姓名">
+          {{userForm.name}}
+        </el-form-item>
+        <el-form-item label="生日">
+          <el-date-picker
+            v-model="userForm.birth"
+            type="date"
+            placeholder="选择日期"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+          <!-- <el-input v-model="userForm.birth"></el-input> -->
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input v-model="userForm.contact"></el-input>
+        </el-form-item>
+        <el-form-item label="个人简介">
+          <el-input v-model="userForm.introduction"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showUserDialog = false">取 消</el-button>
+        <el-button type="primary" @click="updateUserComfirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -179,8 +234,14 @@ import Account from "./components/Account";
 import PosToget from "./components/posToget.vue";
 import CvToget from "./components/cvToget.vue";
 import permission from "@/directive/permission/index.js";
-import { viewmyInfo, viewmypost, viewallpos,viewmycv } from "@/api/myApis.js";
-import { addRecruitment,updateRecruitment,updateCompanyInfo,getcvList} from "@/api/myApis";
+import { viewmyInfo, viewmypost, viewallpos, viewmycv } from "@/api/myApis.js";
+import {
+  addRecruitment,
+  updateRecruitment,
+  updateCompanyInfo,
+  getcvList,
+  updateUserInfo
+} from "@/api/myApis";
 
 export default {
   name: "Profile",
@@ -188,45 +249,51 @@ export default {
   components: { UserCard, Activity, Timeline, Account, PosToget, CvToget },
   data() {
     return {
-      showCompanyDialog:false,
+      showCompanyDialog: false,
+      showUserDialog: false,
       showAddDialog: false,
       showUpdateDialog: false,
-      choosenJodId:-1,
+      choosenJodId: -1,
       user: {},
       activeTab: "activity",
       itemList: [],
       cvList: [],
-      itemList: [      ],
-      cvList:[
-      ],
-      addForm:{
-        companyId:'',
-        position:'',
-        location:'',
-        task:'',
-        salary:0,
-        requirement:'',
-        people:0,
-        hr:'',
-        endTime:'',
+      itemList: [],
+      cvList: [],
+      addForm: {
+        companyId: "",
+        position: "",
+        location: "",
+        task: "",
+        salary: 0,
+        requirement: "",
+        people: 0,
+        hr: "",
+        endTime: "",
       },
-      updateForm:{
-        companyId:'',
-        position:'',
-        location:'',
-        task:'',
-        salary:0,
-        requirement:'',
-        people:0,
-        hr:'',
-        endTime:'',
+      updateForm: {
+        companyId: "",
+        position: "",
+        location: "",
+        task: "",
+        salary: 0,
+        requirement: "",
+        people: 0,
+        hr: "",
+        endTime: "",
       },
-      companyForm:{
-        icon:'',
-        intro:'',
-        contract:'',
+      companyForm: {
+        icon: "",
+        intro: "",
+        contract: "",
       },
-      jobOptions:{
+      userForm: {
+        name: "",
+        birth: "",
+        contact: "",
+        introduction: "",
+      },
+      jobOptions: {
         placeholder: "城市",
         items: [
           { label: "北京", value: "北京" },
@@ -248,7 +315,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["name", "avatar", "roles","id"])
+    ...mapGetters(["name", "avatar", "roles", "id"]),
   },
   created() {
     this.getUser();
@@ -263,48 +330,58 @@ export default {
     }
   },
   methods: {
-    handleDeleteJob(data){
-
-    },
-    changeAddDialog(){
+    handleDeleteJob(data) {},
+    changeAddDialog() {
       this.showAddDialog = true;
     },
-    changeEditDialog(data){
-      this.updateForm= data;
+    changeEditDialog(data) {
+      this.updateForm = data;
       this.showUpdateDialog = true;
     },
-    changeCompanyDialog(data){
-      this.companyForm= data;
+    changeCompanyDialog(data) {
+      this.companyForm = data;
       this.showCompanyDialog = true;
     },
-    addJobComfirm(){
-      console.log(this.id)
-      if(this.addForm.position===''||this.addForm.location===''||this.addForm.task===''||this.addForm.requirement===''||
-        this.addForm.hr===''||this.addForm.endTime===''){
+    changeUserDialog(data) {
+      this.userForm = data;
+      this.userForm.birth = this.userForm.birth.substring(0,10)
+      console.log(this.userForm)
+      this.showUserDialog = true;
+    },
+    addJobComfirm() {
+      console.log(this.id);
+      if (
+        this.addForm.position === "" ||
+        this.addForm.location === "" ||
+        this.addForm.task === "" ||
+        this.addForm.requirement === "" ||
+        this.addForm.hr === "" ||
+        this.addForm.endTime === ""
+      ) {
         this.$message({
           showClose: true,
-          message: '请完善岗位信息！',
-          type: 'warning'
+          message: "请完善岗位信息！",
+          type: "warning",
         });
         return;
       }
       addRecruitment({
-        id:this.id,
-        position:this.addForm.position,
-        location:this.addForm.location,
-        task:this.addForm.task,
-        salary:this.addForm.salary,
-        requirement:this.addForm.requirement,
-        people:this.addForm.people,
-        hr:this.addForm.hr,
-        endTime:this.addForm.endTime,
+        id: this.id,
+        position: this.addForm.position,
+        location: this.addForm.location,
+        task: this.addForm.task,
+        salary: this.addForm.salary,
+        requirement: this.addForm.requirement,
+        people: this.addForm.people,
+        hr: this.addForm.hr,
+        endTime: this.addForm.endTime,
       })
         .then((res) => {
           console.log(res);
           this.$message({
             showClose: true,
-            message: '发布成功！',
-            type: 'success'
+            message: "发布成功！",
+            type: "success",
           });
           this.getallpos();
           this.showAddDialog = false;
@@ -314,33 +391,39 @@ export default {
           this.showAddDialog = false;
         });
     },
-    updateJobComfirm(){
-      if(this.updateForm.position===''||this.updateForm.location===''||this.updateForm.task===''||
-        this.updateForm.requirement===''||this.updateForm.hr===''||this.updateForm.endTime===''){
+    updateJobComfirm() {
+      if (
+        this.updateForm.position === "" ||
+        this.updateForm.location === "" ||
+        this.updateForm.task === "" ||
+        this.updateForm.requirement === "" ||
+        this.updateForm.hr === "" ||
+        this.updateForm.endTime === ""
+      ) {
         this.$message({
           showClose: true,
-          message: '请完善岗位信息！',
-          type: 'warning'
+          message: "请完善岗位信息！",
+          type: "warning",
         });
         return;
       }
       updateRecruitment({
-        id:this.updateForm.recruitmentId,
-        position:this.updateForm.position,
-        location:this.updateForm.location,
-        task:this.updateForm.task,
-        salary:this.updateForm.salary,
-        requirement:this.updateForm.requirement,
-        people:this.updateForm.people,
-        hr:this.updateForm.hr,
-        endTime:this.updateForm.endTime,
+        id: this.updateForm.recruitmentId,
+        position: this.updateForm.position,
+        location: this.updateForm.location,
+        task: this.updateForm.task,
+        salary: this.updateForm.salary,
+        requirement: this.updateForm.requirement,
+        people: this.updateForm.people,
+        hr: this.updateForm.hr,
+        endTime: this.updateForm.endTime,
       })
         .then((res) => {
           console.log(res);
           this.$message({
             showClose: true,
-            message: '修改成功！',
-            type: 'success'
+            message: "修改成功！",
+            type: "success",
           });
           this.getallpos();
           this.showUpdateDialog = false;
@@ -350,7 +433,7 @@ export default {
           this.showUpdateDialog = false;
         });
     },
-    updateCompanyComfirm(){
+    updateCompanyComfirm() {
       // if(this.companyForm.icon===''||this.companyForm.introduction===''||this.companyForm.contact===''){
       //   this.$message({
       //     showClose: true,
@@ -360,17 +443,17 @@ export default {
       //   return;
       // }
       updateCompanyInfo({
-        id:this.id,
-        contact:this.companyForm.contact,
-        icon:this.companyForm.icon,
-        introduction:this.companyForm.introduction,
+        id: this.id,
+        contact: this.companyForm.contact,
+        icon: this.companyForm.icon,
+        introduction: this.companyForm.introduction,
       })
         .then((res) => {
           console.log(res);
           this.$message({
             showClose: true,
-            message: '修改成功！',
-            type: 'success'
+            message: "修改成功！",
+            type: "success",
           });
           //这里应该还要刷新当前页的公司信息
           this.showCompanyDialog = false;
@@ -378,6 +461,32 @@ export default {
         .catch((res) => {
           console.log(res);
           this.showCompanyDialog = false;
+        });
+    },
+    updateUserComfirm() {
+      console.log(this.userForm, this.id);
+      updateUserInfo({
+        id: this.id,
+        contact: this.userForm.contact,
+        birth: this.userForm.birth,
+        introduction: this.userForm.introduction,
+      })
+        .then((res) => {
+          console.log(res);
+          this.$message({
+            showClose: true,
+            message: "修改成功！",
+            type: "success",
+          });
+          //这里应该还要刷新当前页的公司信息
+          this.showUserDialog = false;
+          this.$store.commit('user/SET_INTRODUCTION', this.userForm.introduction)
+          this.$store.commit('user/SET_BIRTH', this.userForm.birth)
+          this.$store.commit('user/SET_CONTRACT', this.userForm.contact)
+        })
+        .catch((res) => {
+          console.log(res);
+          this.showUserDialog = false;
         });
     },
     getList() {},
@@ -393,38 +502,38 @@ export default {
         name: this.name,
         role: this.roles.join(" | "),
         email: "admin@test.com",
-        avatar: this.avatar
+        avatar: this.avatar,
       };
     },
     getpostlist() {
       viewmypost(this.id)
-        .then(res => {
+        .then((res) => {
           console.log(res);
           this.itemList = res.data;
         })
-        .catch(res => {
+        .catch((res) => {
           console.log(res);
         });
     }, //user查看自己的投递的简历
     getallpos() {
       //公司查看所有的岗位
       viewallpos(this.id)
-        .then(res => {
+        .then((res) => {
           console.log(res);
-        //   {
-        //   name: "运营1",
-        //   posid:"1",
-        //   commend: "能上刀山下火海",
-        //   salary: "12K",
-        //   edu:"小学毕业",
-        // },
-          this.cvList = res.data.map(cur => {
-            cur.posid = cur.recruitmentId
-            cur.name = cur.position
-            return cur
+          //   {
+          //   name: "运营1",
+          //   posid:"1",
+          //   commend: "能上刀山下火海",
+          //   salary: "12K",
+          //   edu:"小学毕业",
+          // },
+          this.cvList = res.data.map((cur) => {
+            cur.posid = cur.recruitmentId;
+            cur.name = cur.position;
+            return cur;
           });
         })
-        .catch(res => {
+        .catch((res) => {
           console.log(res);
         });
     },
@@ -436,14 +545,14 @@ export default {
     updatecvList() {
       console.log(1);
       this.getcvList();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scope>
 .app-container {
   padding: 3%;
-  .dialog{
+  .dialog {
     width: 70%;
   }
 }
