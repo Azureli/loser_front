@@ -4,7 +4,7 @@ import request from '@/utils/request'
 
 export function fetchJobs(data) {
   return request({
-    url: 'user/recruitment?position='+data.position+'&location'+data.location+'&offset=0&limit=20',
+    url: 'user/recruitment?position='+data.position+'&location='+data.location+'&offset=0&limit=20',
     method: 'get',
     data
   })

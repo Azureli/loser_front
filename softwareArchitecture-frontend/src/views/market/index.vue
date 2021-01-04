@@ -334,12 +334,12 @@ export default {
       if (item.length !== 0) this.itemLineList.push(item);
     },
     searchJob(){
-      if (this.selectionForm.jobValue === "") {
+      if(this.selectionForm.jobType===-1)
+        this.selectionForm.jobType='';
+      if (this.selectionForm.jobValue === ""&&this.selectionForm.jobType === "") {
         this.getList();
         return;
       }
-      if(this.selectionForm.jobType===-1)
-        this.selectionForm.jobType='';
       fetchJobs({
         position:this.selectionForm.jobValue,
         location:this.selectionForm.jobType,
