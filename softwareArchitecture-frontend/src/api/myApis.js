@@ -72,6 +72,22 @@ export function viewallpos(data){
   })
 }
 
+export function changeUserInfo(data){
+  return request({
+    url:'user/userInfo?name='+data.name+'&birth='+data.birth+'&contact'+data.contact+'&introduction'+data.introduction,
+    mothod:'put',
+    data
+  })
+}
+export function deletemycv(data){
+  return request({
+    url:'user/resumeRecruitment/'+data.resumeId+'/'+data.jobId,
+    method:'delete',
+    data
+  })
+}
+
+
 export function orderDish(data){
   return request({
     url:'/orderDish',
@@ -188,7 +204,7 @@ export function searchDish(data) {
   })
 }
 
-export function changeUserInfo(data) {
+export function Info(data) {
   return request ({
     url: '/editUserInfo',
     method: "post",

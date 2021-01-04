@@ -1,9 +1,9 @@
 <template>
-  <el-row  class="div-get" :style="changecolor(PosInfo.state)">
-    <div class="buttonstate" :style="buttoncolor(PosInfo.state)">{{PosInfo.textstate}}</div>
-    <h3>{{PosInfo.name}}</h3>
+  <el-row  class="div-get" :style="changecolor(PosInfo.status)">
+    <div class="buttonstate" :style="buttoncolor(PosInfo.status)">{{PosInfo.status}}</div>
+    <h3>{{PosInfo.name}}·{{PosInfo.position}}</h3>
     
-    <h4>投递时间:{{PosInfo.time}}<span class="salary">薪资{{PosInfo.salary}}</span></h4>
+    <h4>投递时间:{{PosInfo.commitTime.split('T')[0]}}<span class="salary">薪资{{PosInfo.salary}}</span></h4>
       <el-link class="cancel" type="danger" @click="cancel">取消申请</el-link>
     <el-link class="posdetail" @click="showdetails">岗位详情</el-link>
   
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {confirmOrder } from "@/api/myApis.js";
+import {deletemycv } from "@/api/myApis.js";
 import { mapGetters } from "vuex";
 import permission from "@/directive/permission/index.js";
 
@@ -37,23 +37,29 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      cvForm:{
+        resumeId:"",
+        jobId:"",
+      }
+    };
   },
   methods: {
     changecolor(state) {
+      console.log(state);
       // 1 审核中
       //0 拒绝
       //2 通过
-      if (state == "1") {
+      if (state === "审核中") {
         return {
           background: "#F4F4F5"
         };
       }
-      if (state == "2")
+      if (state === "已通过")
         return {
           background: "#F0F9EB"
         };
-      if (state == "0")
+      if (state === "未通过")
         return {
           background: "rgba(254,240,240,0.9)"
         };
@@ -62,28 +68,58 @@ export default {
       // 1 审核中
       //0 拒绝
       //2 通过
-      if (state == "1") {
+      if (state === "审核中") {
         return {
           background: "#909399"
         };
       }
-      if (state == "2")
+      if (state === "已通过")
         return {
           background: "#67C23A"
         };
-      if (state == "0")
+      if (state === "未通过")
         return {
           background: "#F56C6C"
         };
     },
-    cancel(){
-
+    cancel() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.cvForm.resumeId = this.PosInfo.resumeId;
+          this.cvForm.jobId = this.PosInfo.recruitmentId;
+          deletemycv(this.cvForm)
+            .then(res => {
+              console.log("FFFFFF");
+              console.log(res);
+              this.$emit("updateList");
+            })
+            .catch(res => {
+              console.log(res);
+            });
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
-    
-    showdetails(){
-       this.$router.push({ path: "/detail" });
+
+    showdetails() {
+      this.$router.push({
+        path: "/detail",
+        query: { info: this.PosInfo }
+      });
     }
-  },
+  }
 };
 </script>
 
