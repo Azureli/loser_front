@@ -344,7 +344,7 @@ export default {
     },
     changeUserDialog(data) {
       this.userForm = data;
-      this.userForm.birth = this.userForm.birth.substring(0,10)
+      this.userForm.birth = this.userForm.birth?this.userForm.birth.substring(0,10):""
       console.log(this.userForm)
       this.showUserDialog = true;
     },

@@ -11,7 +11,7 @@
       </div>
       <div class="box-right" v-permission="['user']">
         <p>姓名：{{userinfo.name}}</p>
-        <p>生日：{{userinfo.birth.substring(0,10)}}</p>
+        <p>生日：{{userinfo.birth?userinfo.birth.substring(0,10):""}}</p>
         <p>联系方式： {{userinfo.contact}}</p>
       </div>
       <div class="box-right" v-permission="['chef']">
